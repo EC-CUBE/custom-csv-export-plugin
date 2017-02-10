@@ -1,0 +1,33 @@
+Plugin\CsvSql\Entity\CsvSql:
+    type: entity
+    table: plg_csv_sql
+    repositoryClass: Plugin\CsvSql\Repository\CsvSqlRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: csv_id
+            generator:
+                strategy: AUTO
+    fields:
+        sql_name:
+            type: text
+            nullable: false
+        csv_sql:
+            type: text
+            nullable: false
+        create_date:
+            type: datetime
+            nullable: false
+        update_date:
+            type: datetime
+            nullable: false
+        del_flg:
+            type: smallint
+            nullable: false
+            unsigned: false
+            options:
+                default: '0'
+    lifecycleCallbacks: {  }

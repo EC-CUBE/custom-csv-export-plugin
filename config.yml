@@ -1,0 +1,7 @@
+name: 高度なCSV出力設定プラグイン
+code: CsvSql
+version: 1.0.0
+service:
+    - CsvSqlServiceProvider
+orm.path:
+    - /Resource/doctrine

@@ -1,0 +1,158 @@
+
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['content', 'admin_csv_sql'] %}
+
+{% block title %}システム設定{% endblock %}
+{% block sub_title %}CSV出力用高度な設定{% endblock %}
+
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block javascript %}
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.core.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.widget.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js"></script>
+    <script>
+    $(function(){
+        $('#regist_btn').click(function() {
+            $("#form1").attr("action", "{% if TargetCsvSql.id %}{{ path('admin_shop_csv_sql_edit', {id: TargetCsvSql.id}) }}{% else %}{{ url('admin_shop_csv_sql') }}{% endif %}");
+            $('#form1').submit();
+            return false;
+        });
+
+        $('#check_btn').click(function() {
+            $("#form1").attr("action", "{% if TargetCsvSql.id %}{{ path('admin_shop_csv_sql_edit_confirm', {id: TargetCsvSql.id}) }}{% else %}{{ url('admin_shop_csv_sql_confirm') }}{% endif %}");
+            $('#form1').submit();
+            return false;
+        });
+});
+</script>
+{% endblock %}
+
+{% block main %}
+    <div id="group_wrap" class="row">
+
+        <div id="list_box" class="col-md-9">
+
+            <div id="list_box__body" class="box">
+
+                <div id="bread_crumb_box" class="box-header">
+                    <div id="bread_crumb_box__body" class="box-title box-title-category">
+                        <a >SQL一覧</a>
+                    </div>
+                </div>
+                {% if CsvSqls|length > 0 %}
+                    <div id="sortable_list" class="box-body no-padding no-border">
+                        <div id="sortable_list_box" class="sortable_list">
+                            <div id="sortable_list_box__list" class="tableish">
+
+                                {% for CsvSql in CsvSqls %}
+
+                                <div id="sortable_list__item--{{ CsvSql.id }}" class="item_box tr" data-group-id="{{ CsvSql.id }}">
+                                    <div id="sortable_list__item_body--{{ CsvSql.id }}" class="item_pattern td">
+                                        <a href="{{ url('admin_shop_csv_sql_edit', {id: CsvSql.id}) }}">{{ CsvSql.sql_name}}</a>
+                                    </div>
+                                    <div id="sortable_list__item_menu_box--{{ CsvSql.id }}" class="icon_edit td">
+                                        <div id="sortable_list__item_menu_toggle--{{ CsvSql.id }}" class="dropdown">
+                                            <a class="dropdown-toggle" data-toggle="dropdown"><svg class="cb cb-ellipsis-h"> <use xlink:href="#cb-ellipsis-h" /></svg></a>
+                                            <ul id="sortable_list__menu--{{ CsvSql.id }}" class="dropdown-menu dropdown-menu-right">
+
+                                                <li>
+                                                    <a href="{{ url('admin_shop_csv_sql_delete', {id: CsvSql.id}) }}" {{ csrf_token_for_anchor() }} data-method="delete">
+                                                        削除
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="{{ url('admin_shop_csv_sql_output', {id: CsvSql.id}) }}">
+                                                        CSV出力
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div><!-- /.item_box -->
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                {% else %}
+                    <div id="list_box" class="box-body no-padding">
+                        <div id="list_box__not_find_category" class="data-empty"><svg class="cb cb-inbox"> <use xlink:href="#cb-inbox" /></svg><p>データはありません</p></div>
+                    </div><!-- /.box-body -->
+                {% endif %}
+                <!-- ▲ データがある時 ▲ -->
+            </div><!-- /.box -->
+
+            <div id="edit_box" class="box">
+
+                <div id="bread_crumb_box" class="box-header">
+                    <div id="bread_crumb_box__body" class="box-title box-title-category">
+                        <a>SQL設定
+                            {% if TargetCsvSql.id %}
+                                (編集中：{{ TargetCsvSql.sql_name }})
+                            {% else %}
+                                (新規入力)
+                            {% endif %}
+                        </a>
+                    </div>
+                </div><!-- /.box-header -->
+
+                <div id="edit_box" class="box-body">
+                    <div id="edit_box__body" class="row">
+                        <div id="edit_box__body_inner" class="col-md-12">
+                            <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action="" enctype="multipart/form-data">
+                                {{ form_widget(form._token) }}
+                                {{ form_row(form.sql_name, {attr: {placeholder: 'SQL名を入力'}}) }}
+                                {{ form_row(form.csv_sql, {attr: {placeholder: 'SQL文を入力'}}) }}
+                                <div class="col-sm-0 col-sm-offset-3 col-md-12 col-md-offset-0">
+                                    <button id="check_btn" class="btn btn-primary btn-block btn-lg">SQLチェック</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+
+            </div><!-- /.box -->
+
+            {% if message|length > 0 %}
+                <div id="edit_box" class="box">
+
+                    <div id="bread_crumb_box" class="box-header">
+                        <div id="bread_crumb_box__body" class="box-title box-title-category">
+                            <a>SQL確認結果</a>
+                        </div>
+                    </div><!-- /.box-header -->
+
+                    <div id="list_box" class="box-body no-padding">
+                        <div id="list_box__not_search_sql" class="data-empty">
+                            <pre>{{ message }}</pre>
+                        </div>
+                    </div><!-- /.box-body -->
+
+                </div><!-- /.box -->
+            {% else %}
+            {% endif %}
+
+
+        </div><!-- /.col -->
+
+        <div class="col-md-3" id="aside_column">
+            <div id="common_box" class="col_inner">
+                <div id="common_button_box" class="box no-header">
+                    <div id="common_button_box__body" class="box-body">
+                        <div id="common_button_box__insert_button_area" class="row text-center">
+                            <div class="col-sm-6 col-sm-offset-3 col-md-12 col-md-offset-0">
+                                <button id="regist_btn" class="btn btn-primary btn-block btn-lg">登録</button>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div><!-- /.box -->
+        </div><!-- /.col -->
+
+    </div>
+{% endblock %}
