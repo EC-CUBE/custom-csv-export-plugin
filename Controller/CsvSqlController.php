@@ -1,15 +1,33 @@
 <?php
+/*
+ * This file is part of the Related Product plugin
+ *
+ * Copyright (C) 2017 LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Plugin\CsvSql\Controller;
 
 use Eccube\Application;
 use Eccube\Controller\AbstractController;
+use Plugin\CsvSql\Entity\CsvSql;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CsvSqlController extends AbstractController
 {
+
+    /**
+     * CSV一覧画面
+     *
+     * @param Application $app
+     * @param Request $request
+     * @param null $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function index(Application $app, Request $request, $id = null)
     {
         if ($id) {
@@ -18,27 +36,22 @@ class CsvSqlController extends AbstractController
                 throw new NotFoundHttpException();
             }
         } else {
-            $TargetCsvSql = new \Plugin\CsvSql\Entity\CsvSql();
+            $TargetCsvSql = new CsvSql();
         }
 
-        //
-        $builder = $app['form.factory']
-        ->createBuilder('admin_csv_sql', $TargetCsvSql);
+        $builder = $app['form.factory']->createBuilder('admin_csv_sql', $TargetCsvSql);
 
         $form = $builder->getForm();
 
-        //
-        if ($request->getMethod() === 'POST') {
-            $form->handleRequest($request);
-            $errors = $form['csv_sql']->getErrors();
+        $form->handleRequest($request);
 
-            if ($form->isValid()) {
-                $sql = 'SELECT '.$form['csv_sql']->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $sql = 'SELECT '.$form['csv_sql']->getData();
+            try {
                 $result = $app['csv_sql.repository.csv_sql']->query($sql);
 
-                if ($result != 'true') {
-                    $app->addError('SQLを保存できませんでした。SQL文を正しく入力してください。', 'admin');
-                } else {
+                if ($result) {
                     $status = $app['csv_sql.repository.csv_sql']->save($TargetCsvSql);
 
                     if ($status) {
@@ -48,20 +61,31 @@ class CsvSqlController extends AbstractController
                     } else {
                         $app->addError('SQLを保存できませんでした。', 'admin');
                     }
+                } else {
+                    $app->addError('SQLを保存できませんでした。', 'admin');
                 }
+            } catch (\Exception $e) {
+                $app->addError('SQLを保存できませんでした。SQL文を正しく入力してください。', 'admin');
             }
         }
 
         $CsvSqls = $app['csv_sql.repository.csv_sql']->getList();
 
         return $app->render('CsvSql/Resource/template/Admin/index.twig', array(
-                'form' => $form->createView(),
-                'CsvSqls' => $CsvSqls,
-                'message' => $message,
-                'TargetCsvSql' => $TargetCsvSql,
+            'form' => $form->createView(),
+            'CsvSqls' => $CsvSqls,
+            'TargetCsvSql' => $TargetCsvSql,
         ));
     }
 
+    /**
+     * CSV削除
+     *
+     * @param Application $app
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function delete(Application $app, Request $request, $id)
     {
         $this->isTokenValid($app);
@@ -76,7 +100,7 @@ class CsvSqlController extends AbstractController
 
         $status = $app['csv_sql.repository.csv_sql']->delete($TargetCsvSql);
 
-        if ($status === true) {
+        if ($status) {
             $app->addSuccess('SQLを削除しました。', 'admin');
         } else {
             $app->addError('SQLを削除できませんでした。', 'admin');
@@ -87,6 +111,11 @@ class CsvSqlController extends AbstractController
 
     /**
      * CSV出力.
+     *
+     * @param Application $app
+     * @param Request $request
+     * @param null $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|StreamedResponse
      */
     public function csvOutput(Application $app, Request $request, $id = null)
     {
@@ -105,18 +134,16 @@ class CsvSqlController extends AbstractController
 
         $csv_data = $app['csv_sql.repository.csv_sql']->getArrayList($TargetCsvSql->getCsvSql());
 
-        $status = true;
-        if ($status == true) {
+        if (count($csv_data) > 0) {
 
             // ヘッダー行の抽出
+            $csv_header = array();
             foreach ($csv_data as $csv_row) {
                 foreach ($csv_row as $key => $value) {
                     $csv_header[] = $key;
                 }
             }
             $csv_header = array_values(array_unique($csv_header));
-
-            $filename = 'csv_'.date('ymd_His').'.csv';
 
             $response->setCallback(function () use ($app, $request, $csv_header, $csv_data) {
 
@@ -125,10 +152,10 @@ class CsvSqlController extends AbstractController
                 fputcsv($fp, $csv_header, $app['config']['csv_export_separator']);
 
                 // データを出力
-                foreach ($csv_data  as $csv_row) {
+                foreach ($csv_data as $csv_row) {
                     $row = array();
                     foreach ($csv_header as $header_name) {
-                        mb_convert_variables('SJIS-win', 'UTF-8', $csv_row[$header_name]);
+                        mb_convert_variables($app['config']['csv_export_encoding'], 'UTF-8', $csv_row[$header_name]);
                         $row[] = $csv_row[$header_name];
                     }
                     fputcsv($fp, $row, $app['config']['csv_export_separator']);
@@ -138,6 +165,8 @@ class CsvSqlController extends AbstractController
 
             });
 
+            $now = new \DateTime();
+            $filename = 'csv_'.$now->format('YmdHis').'.csv';
             $response->headers->set('Content-Type', 'application/octet-stream');
             $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
             $response->send();
@@ -145,15 +174,18 @@ class CsvSqlController extends AbstractController
             return $response;
         }
 
-        if ($status === false) {
-            $app->addError('CSVを出力できませんでした。', 'admin');
+        $app->addError('CSVを出力できませんでした。', 'admin');
 
-            return $app->redirect($app->url('admin_shop_csv_sql'));
-        }
+        return $app->redirect($app->url('admin_shop_csv_sql'));
     }
 
     /**
      * SQL確認.
+     *
+     * @param Application $app
+     * @param Request $request
+     * @param null $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function sqlConfirm(Application $app, Request $request, $id = null)
     {
@@ -163,27 +195,29 @@ class CsvSqlController extends AbstractController
                 throw new NotFoundHttpException();
             }
         } else {
-            $TargetCsvSql = new \Plugin\CsvSql\Entity\CsvSql();
+            $TargetCsvSql = new CsvSql();
         }
 
-        //
-        $builder = $app['form.factory']
-        ->createBuilder('admin_csv_sql', $TargetCsvSql);
+        $builder = $app['form.factory']->createBuilder('admin_csv_sql', $TargetCsvSql);
 
         $form = $builder->getForm();
 
-        //
-        if ($request->getMethod() === 'POST') {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                if (!is_null($form['csv_sql']->getData())) {
-                    $sql = 'SELECT '.$form['csv_sql']->getData();
+        $form->handleRequest($request);
+
+        $message = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            if (!is_null($form['csv_sql']->getData())) {
+                $sql = 'SELECT '.$form['csv_sql']->getData();
+                try {
                     $result = $app['csv_sql.repository.csv_sql']->query($sql);
-                    if ($result == 'true') {
+                    if ($result) {
                         $message = 'エラーはありません。';
                     } else {
-                        $message = $result;
+                        $message = 'エラーが発生しました。';
                     }
+                } catch (\Exception $e) {
+                    $message = $e->getMessage();
                 }
             }
         }
@@ -191,10 +225,10 @@ class CsvSqlController extends AbstractController
         $CsvSqls = $app['csv_sql.repository.csv_sql']->getList();
 
         return $app->render('CsvSql/Resource/template/Admin/index.twig', array(
-                'form' => $form->createView(),
-                'CsvSqls' => $CsvSqls,
-                'message' => $message,
-                'TargetCsvSql' => $TargetCsvSql,
+            'form' => $form->createView(),
+            'CsvSqls' => $CsvSqls,
+            'message' => $message,
+            'TargetCsvSql' => $TargetCsvSql,
         ));
     }
 }

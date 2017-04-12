@@ -5,12 +5,11 @@ Plugin\CsvSql\Entity\CsvSql:
     id:
         id:
             type: integer
-            nullable: false
-            unsigned: false
-            id: true
             column: csv_id
             generator:
                 strategy: AUTO
+            options:
+                unsigned: true
     fields:
         sql_name:
             type: text
@@ -29,5 +28,5 @@ Plugin\CsvSql\Entity\CsvSql:
             nullable: false
             unsigned: false
             options:
-                default: '0'
+                default: 0
     lifecycleCallbacks: {  }
