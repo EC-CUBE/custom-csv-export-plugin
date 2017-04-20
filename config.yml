@@ -1,4 +1,4 @@
-name: 高度なCSV出力設定プラグイン
+name: CSV出力高度な設定プラグイン
 code: CsvSql
 version: 1.0.0
 service:

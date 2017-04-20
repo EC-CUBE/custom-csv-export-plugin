@@ -1,35 +1,74 @@
 <?php
+/*
+ * This file is part of the Related Product plugin
+ *
+ * Copyright (C) 2017 LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Plugin\CsvSql;
 
+use Eccube\Application;
 use Eccube\Plugin\AbstractPluginManager;
 
 class PluginManager extends AbstractPluginManager
 {
-    // インストール時にマイグレーションの「up」メソッドを実行します
-    public function install($config, $app)
+    /**
+     * プラグインインストール時の処理
+     *
+     * @param $config
+     * @param Application $app
+     * @throws \Exception
+     */
+    public function install($config, Application $app)
     {
     }
 
-    // アンインストール時にマイグレーションの「down」メソッドを実行します
-    public function uninstall($config, $app)
+    /**
+     * プラグイン削除時の処理
+     *
+     * @param $config
+     * @param Application $app
+     */
+    public function uninstall($config, Application $app)
     {
         $this->migrationSchema($app, __DIR__.'/Resource/doctrine/migration', $config['code'], 0);
     }
 
-    // プラグイン有効時に、指定の処理 (ファイルのコピーなど) を実行できます。
-    public function enable($config, $app)
+    /**
+     * プラグイン有効時の処理
+     *
+     * @param $config
+     * @param Application $app
+     * @throws \Exception
+     */
+    public function enable($config, Application $app)
     {
         $this->migrationSchema($app, __DIR__.'/Resource/doctrine/migration', $config['code']);
     }
 
-    // プラグイン無効時に、指定の処理 ( ファイルの削除など ) を実行できます。
-    public function disable($config, $app)
+    /**
+     * プラグイン無効時の処理
+     *
+     * @param $config
+     * @param Application $app
+     * @throws \Exception
+     */
+    public function disable($config, Application $app)
     {
     }
 
-    // プラグインアップデート時に、指定の処理を実行できます。
-    public function update($config, $app)
+    /**
+     * プラグイン更新時の処理
+     *
+     * @param $config
+     * @param Application $app
+     * @throws \Exception
+     */
+    public function update($config, Application $app)
     {
     }
+
 }

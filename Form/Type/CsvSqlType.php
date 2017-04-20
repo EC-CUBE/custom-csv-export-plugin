@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the Related Product plugin
+ *
+ * Copyright (C) 2017 LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Plugin\CsvSql\Form\Type;
 
@@ -25,19 +33,6 @@ class CsvSqlType extends AbstractType
         /** @var $app \Eccube\Application */
         $app = $this->app;
 
-        $tabledata = array();
-
-        $driverChain = $app['orm.em']->getConfiguration()->getMetadataDriverImpl();
-        $drivers = $driverChain->getDrivers();
-
-        foreach ($drivers as $namespace => $driver) {
-            $classNames = $driver->getAllClassNames();
-            foreach ($classNames as $className) {
-                $meta = $app['orm.em']->getMetadataFactory()->getMetadataFor($className);
-                $tabledata[$meta->getName()] = $meta->getTableName();
-            }
-        }
-
         $builder
             ->add('sql_name', 'text', array(
                 'label' => '名称',
@@ -49,16 +44,10 @@ class CsvSqlType extends AbstractType
                 ),
             ))
             ->add('csv_sql', 'textarea', array(
-                    'label' => 'SQL文(最初のSELECTは記述しないでください。)',
-                    'constraints' => array(
-                            new Asserts\SqlCheck(),
-                            ),
-            ))
-            ->add('tabledata', 'choice', array(
-                    'choices' => $tabledata,
-                    'label' => 'テーブル一覧',
-                    'expanded' => false,
-                    'multiple' => false,
+                'label' => 'SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)',
+                'constraints' => array(
+                    new Asserts\SqlCheck(),
+                ),
             ));
     }
 

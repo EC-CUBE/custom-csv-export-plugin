@@ -2,103 +2,166 @@
 
 namespace Plugin\CsvSql\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * CsvSql
+ */
 class CsvSql extends \Eccube\Entity\AbstractEntity
 {
+    /**
+     * @var integer
+     */
     private $id;
 
+    /**
+     * @var string
+     */
     private $sql_name;
 
+    /**
+     * @var string
+     */
     private $csv_sql;
 
+    /**
+     * @var \DateTime
+     */
     private $create_date;
 
+    /**
+     * @var \DateTime
+     */
     private $update_date;
 
-    private $del_flg;
+    /**
+     * @var integer
+     */
+    private $del_flg = 0;
 
-    private $tabledata;
-
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
     public function getId()
     {
         return $this->id;
     }
 
-    public function setId($id)
+    /**
+     * Set sql_name
+     *
+     * @param string $sqlName
+     * @return CsvSql
+     */
+    public function setSqlName($sqlName)
     {
-        $this->id = $id;
+        $this->sql_name = $sqlName;
 
         return $this;
     }
 
+    /**
+     * Get sql_name
+     *
+     * @return string 
+     */
     public function getSqlName()
     {
         return $this->sql_name;
     }
 
-    public function setSqlName($sql_name)
+    /**
+     * Set csv_sql
+     *
+     * @param string $csvSql
+     * @return CsvSql
+     */
+    public function setCsvSql($csvSql)
     {
-        $this->sql_name = $sql_name;
+        $this->csv_sql = $csvSql;
 
         return $this;
     }
 
+    /**
+     * Get csv_sql
+     *
+     * @return string 
+     */
     public function getCsvSql()
     {
         return $this->csv_sql;
     }
 
-    public function setCsvSql($csv_sql)
+    /**
+     * Set create_date
+     *
+     * @param \DateTime $createDate
+     * @return CsvSql
+     */
+    public function setCreateDate($createDate)
     {
-        $this->csv_sql = $csv_sql;
+        $this->create_date = $createDate;
 
         return $this;
     }
 
+    /**
+     * Get create_date
+     *
+     * @return \DateTime 
+     */
     public function getCreateDate()
     {
         return $this->create_date;
     }
 
-    public function setCreateDate($create_date)
+    /**
+     * Set update_date
+     *
+     * @param \DateTime $updateDate
+     * @return CsvSql
+     */
+    public function setUpdateDate($updateDate)
     {
-        $this->create_date = $create_date;
+        $this->update_date = $updateDate;
 
         return $this;
     }
 
+    /**
+     * Get update_date
+     *
+     * @return \DateTime 
+     */
     public function getUpdateDate()
     {
         return $this->update_date;
     }
 
-    public function setUpdateDate($update_date)
+    /**
+     * Set del_flg
+     *
+     * @param integer $delFlg
+     * @return CsvSql
+     */
+    public function setDelFlg($delFlg)
     {
-        $this->update_date = $update_date;
+        $this->del_flg = $delFlg;
 
         return $this;
     }
 
+    /**
+     * Get del_flg
+     *
+     * @return integer 
+     */
     public function getDelFlg()
     {
         return $this->del_flg;
     }
 
-    public function setDelFlg($del_flg)
-    {
-        $this->del_flg = $del_flg;
-
-        return $this;
-    }
-
-    public function getTabledata()
-    {
-        return $this->tabledata;
-    }
-
-    public function setTabledata($tabledata)
-    {
-        $this->tabledata = $tabledata;
-
-        return $this;
-    }
 }
