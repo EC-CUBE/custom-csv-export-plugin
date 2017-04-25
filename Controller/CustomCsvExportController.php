@@ -47,7 +47,7 @@ class CustomCsvExportController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $sql = 'SELECT '.$form['custom_csv_export']->getData();
+            $sql = 'SELECT '.$form['custom_sql']->getData();
             try {
                 $result = $app['custom_csv_export.repository.custom_csv_export']->query($sql);
 
@@ -132,7 +132,7 @@ class CustomCsvExportController extends AbstractController
 
         $response = new StreamedResponse();
 
-        $csv_data = $app['custom_csv_export.repository.custom_csv_export']->getArrayList($TargetCustomCsvExport->getCustomCsvExport());
+        $csv_data = $app['custom_csv_export.repository.custom_csv_export']->getArrayList($TargetCustomCsvExport->getCustomSql());
 
         if (count($csv_data) > 0) {
 
@@ -208,8 +208,8 @@ class CustomCsvExportController extends AbstractController
         $message = null;
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if (!is_null($form['custom_csv_export']->getData())) {
-                $sql = 'SELECT '.$form['custom_csv_export']->getData();
+            if (!is_null($form['custom_sql']->getData())) {
+                $sql = 'SELECT '.$form['custom_sql']->getData();
                 try {
                     $result = $app['custom_csv_export.repository.custom_csv_export']->query($sql);
                     if ($result) {

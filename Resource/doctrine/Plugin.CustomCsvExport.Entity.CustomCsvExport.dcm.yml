@@ -14,7 +14,7 @@ Plugin\CustomCsvExport\Entity\CustomCsvExport:
         sql_name:
             type: text
             nullable: false
-        custom_csv_export:
+        custom_sql:
             type: text
             nullable: false
         create_date:

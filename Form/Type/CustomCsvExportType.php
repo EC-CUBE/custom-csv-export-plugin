@@ -43,7 +43,7 @@ class CustomCsvExportType extends AbstractType
                     )),
                 ),
             ))
-            ->add('custom_csv_export', 'textarea', array(
+            ->add('custom_sql', 'textarea', array(
                 'label' => 'SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)',
                 'constraints' => array(
                     new Asserts\SqlCheck(),

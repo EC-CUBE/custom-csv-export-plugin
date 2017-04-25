@@ -118,7 +118,7 @@
                             <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action="" enctype="multipart/form-data">
                                 {{ form_widget(form._token) }}
                                 {{ form_row(form.sql_name, {attr: {placeholder: '保存するSQL名を入力'}}) }}
-                                {{ form_row(form.custom_csv_export, {attr: {placeholder: 'SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。'}}) }}
+                                {{ form_row(form.custom_sql, {attr: {placeholder: 'SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。'}}) }}
                                 <div class="col-sm-0 col-sm-offset-3 col-md-12 col-md-offset-0">
                                     <button id="check_btn" class="btn btn-primary btn-block btn-lg">SQLチェック</button>
                                 </div>

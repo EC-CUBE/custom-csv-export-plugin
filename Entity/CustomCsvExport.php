@@ -22,7 +22,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
     /**
      * @var string
      */
-    private $custom_csv_export;
+    private $custom_sql;
 
     /**
      * @var \DateTime
@@ -73,26 +73,26 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
     }
 
     /**
-     * Set custom_csv_export
+     * Set custom_sql
      *
      * @param string $customCsvExport
      * @return CustomCsvExport
      */
-    public function setCustomCsvExport($customCsvExport)
+    public function setCustomSql($customSql)
     {
-        $this->custom_csv_export = $customCsvExport;
+        $this->custom_sql = $customSql;
 
         return $this;
     }
 
     /**
-     * Get custom_csv_export
+     * Get custom_sql
      *
      * @return string 
      */
-    public function getCustomCsvExport()
+    public function getCustomSql()
     {
-        return $this->custom_csv_export;
+        return $this->custom_sql;
     }
 
     /**
