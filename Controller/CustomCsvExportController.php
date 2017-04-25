@@ -8,16 +8,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\CsvSql\Controller;
+namespace Plugin\CustomCsvExport\Controller;
 
 use Eccube\Application;
 use Eccube\Controller\AbstractController;
-use Plugin\CsvSql\Entity\CsvSql;
+use Plugin\CustomCsvExport\Entity\CustomCsvExport;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class CsvSqlController extends AbstractController
+class CustomCsvExportController extends AbstractController
 {
 
     /**
@@ -31,15 +31,15 @@ class CsvSqlController extends AbstractController
     public function index(Application $app, Request $request, $id = null)
     {
         if ($id) {
-            $TargetCsvSql = $app['csv_sql.repository.csv_sql']->find($id);
-            if (!$TargetCsvSql) {
+            $TargetCustomCsvExport = $app['custom_csv_export.repository.custom_csv_export']->find($id);
+            if (!$TargetCustomCsvExport) {
                 throw new NotFoundHttpException();
             }
         } else {
-            $TargetCsvSql = new CsvSql();
+            $TargetCustomCsvExport = new CustomCsvExport();
         }
 
-        $builder = $app['form.factory']->createBuilder('admin_csv_sql', $TargetCsvSql);
+        $builder = $app['form.factory']->createBuilder('admin_custom_csv_export', $TargetCustomCsvExport);
 
         $form = $builder->getForm();
 
@@ -47,17 +47,17 @@ class CsvSqlController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $sql = 'SELECT '.$form['csv_sql']->getData();
+            $sql = 'SELECT '.$form['custom_csv_export']->getData();
             try {
-                $result = $app['csv_sql.repository.csv_sql']->query($sql);
+                $result = $app['custom_csv_export.repository.custom_csv_export']->query($sql);
 
                 if ($result) {
-                    $status = $app['csv_sql.repository.csv_sql']->save($TargetCsvSql);
+                    $status = $app['custom_csv_export.repository.custom_csv_export']->save($TargetCustomCsvExport);
 
                     if ($status) {
                         $app->addSuccess('SQLを保存しました。', 'admin');
 
-                        return $app->redirect($app->url('admin_shop_csv_sql'));
+                        return $app->redirect($app->url('admin_shop_custom_csv_export'));
                     } else {
                         $app->addError('SQLを保存できませんでした。', 'admin');
                     }
@@ -69,12 +69,12 @@ class CsvSqlController extends AbstractController
             }
         }
 
-        $CsvSqls = $app['csv_sql.repository.csv_sql']->getList();
+        $CustomCsvExports = $app['custom_csv_export.repository.custom_csv_export']->getList();
 
-        return $app->render('CsvSql/Resource/template/Admin/index.twig', array(
+        return $app->render('CustomCsvExport/Resource/template/Admin/index.twig', array(
             'form' => $form->createView(),
-            'CsvSqls' => $CsvSqls,
-            'TargetCsvSql' => $TargetCsvSql,
+            'CustomCsvExports' => $CustomCsvExports,
+            'TargetCustomCsvExport' => $TargetCustomCsvExport,
         ));
     }
 
@@ -90,15 +90,15 @@ class CsvSqlController extends AbstractController
     {
         $this->isTokenValid($app);
 
-        $TargetCsvSql = $app['csv_sql.repository.csv_sql']->find($id);
+        $TargetCustomCsvExport = $app['custom_csv_export.repository.custom_csv_export']->find($id);
 
-        if (!$TargetCsvSql) {
+        if (!$TargetCustomCsvExport) {
             $app->deleteMessage();
 
-            return $app->redirect($app->url('admin_shop_csv_sql'));
+            return $app->redirect($app->url('admin_shop_custom_csv_export'));
         }
 
-        $status = $app['csv_sql.repository.csv_sql']->delete($TargetCsvSql);
+        $status = $app['custom_csv_export.repository.custom_csv_export']->delete($TargetCustomCsvExport);
 
         if ($status) {
             $app->addSuccess('SQLを削除しました。', 'admin');
@@ -106,7 +106,7 @@ class CsvSqlController extends AbstractController
             $app->addError('SQLを削除できませんでした。', 'admin');
         }
 
-        return $app->redirect($app->url('admin_shop_csv_sql'));
+        return $app->redirect($app->url('admin_shop_custom_csv_export'));
     }
 
     /**
@@ -125,25 +125,26 @@ class CsvSqlController extends AbstractController
         $em = $app['orm.em'];
         $em->getConfiguration()->setSQLLogger(null);
 
-        $TargetCsvSql = $app['csv_sql.repository.csv_sql']->find($id);
-        if (!$TargetCsvSql) {
+        $TargetCustomCsvExport = $app['custom_csv_export.repository.custom_csv_export']->find($id);
+        if (!$TargetCustomCsvExport) {
             throw new NotFoundHttpException();
         }
 
         $response = new StreamedResponse();
 
-        $csv_data = $app['csv_sql.repository.csv_sql']->getArrayList($TargetCsvSql->getCsvSql());
+        $csv_data = $app['custom_csv_export.repository.custom_csv_export']->getArrayList($TargetCustomCsvExport->getCustomCsvExport());
 
         if (count($csv_data) > 0) {
 
             // ヘッダー行の抽出
             $csv_header = array();
             foreach ($csv_data as $csv_row) {
+  
                 foreach ($csv_row as $key => $value) {
-                    $csv_header[] = $key;
+                    $csv_header[$key] = mb_convert_encoding($key, $app['config']['csv_export_encoding'], 'UTF-8');
                 }
+                break;
             }
-            $csv_header = array_values(array_unique($csv_header));
 
             $response->setCallback(function () use ($app, $request, $csv_header, $csv_data) {
 
@@ -154,9 +155,9 @@ class CsvSqlController extends AbstractController
                 // データを出力
                 foreach ($csv_data as $csv_row) {
                     $row = array();
-                    foreach ($csv_header as $header_name) {
-                        mb_convert_variables($app['config']['csv_export_encoding'], 'UTF-8', $csv_row[$header_name]);
-                        $row[] = $csv_row[$header_name];
+                    foreach ($csv_header as $headerKey => $header_name) {
+                        mb_convert_variables($app['config']['csv_export_encoding'], 'UTF-8', $csv_row[$headerKey]);
+                        $row[] = $csv_row[$headerKey];
                     }
                     fputcsv($fp, $row, $app['config']['csv_export_separator']);
                 }
@@ -176,7 +177,7 @@ class CsvSqlController extends AbstractController
 
         $app->addError('CSVを出力できませんでした。', 'admin');
 
-        return $app->redirect($app->url('admin_shop_csv_sql'));
+        return $app->redirect($app->url('admin_shop_custom_csv_export'));
     }
 
     /**
@@ -190,15 +191,15 @@ class CsvSqlController extends AbstractController
     public function sqlConfirm(Application $app, Request $request, $id = null)
     {
         if ($id) {
-            $TargetCsvSql = $app['csv_sql.repository.csv_sql']->find($id);
-            if (!$TargetCsvSql) {
+            $TargetCustomCsvExport = $app['custom_csv_export.repository.custom_csv_export']->find($id);
+            if (!$TargetCustomCsvExport) {
                 throw new NotFoundHttpException();
             }
         } else {
-            $TargetCsvSql = new CsvSql();
+            $TargetCustomCsvExport = new CustomCsvExport();
         }
 
-        $builder = $app['form.factory']->createBuilder('admin_csv_sql', $TargetCsvSql);
+        $builder = $app['form.factory']->createBuilder('admin_custom_csv_export', $TargetCustomCsvExport);
 
         $form = $builder->getForm();
 
@@ -207,10 +208,10 @@ class CsvSqlController extends AbstractController
         $message = null;
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if (!is_null($form['csv_sql']->getData())) {
-                $sql = 'SELECT '.$form['csv_sql']->getData();
+            if (!is_null($form['custom_csv_export']->getData())) {
+                $sql = 'SELECT '.$form['custom_csv_export']->getData();
                 try {
-                    $result = $app['csv_sql.repository.csv_sql']->query($sql);
+                    $result = $app['custom_csv_export.repository.custom_csv_export']->query($sql);
                     if ($result) {
                         $message = 'エラーはありません。';
                     } else {
@@ -222,13 +223,13 @@ class CsvSqlController extends AbstractController
             }
         }
 
-        $CsvSqls = $app['csv_sql.repository.csv_sql']->getList();
+        $CustomCsvExports = $app['custom_csv_export.repository.custom_csv_export']->getList();
 
-        return $app->render('CsvSql/Resource/template/Admin/index.twig', array(
+        return $app->render('CustomCsvExport/Resource/template/Admin/index.twig', array(
             'form' => $form->createView(),
-            'CsvSqls' => $CsvSqls,
+            'CustomCsvExports' => $CustomCsvExports,
             'message' => $message,
-            'TargetCsvSql' => $TargetCsvSql,
+            'TargetCustomCsvExport' => $TargetCustomCsvExport,
         ));
     }
 }

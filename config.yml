@@ -1,7 +1,7 @@
-name: CSV出力高度な設定プラグイン
-code: CsvSql
+name: カスタムCSV出力プラグイン
+code: CustomCsvExport
 version: 1.0.0
 service:
-    - CsvSqlServiceProvider
+    - CustomCsvExportServiceProvider
 orm.path:
     - /Resource/doctrine

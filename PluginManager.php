@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\CsvSql;
+namespace Plugin\CustomCsvExport;
 
 use Eccube\Application;
 use Eccube\Plugin\AbstractPluginManager;

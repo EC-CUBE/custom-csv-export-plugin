@@ -8,15 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\CsvSql\Form\Type;
+namespace Plugin\CustomCsvExport\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Plugin\CsvSql\Validator as Asserts;
+use Plugin\CustomCsvExport\Validator as Asserts;
 
-class CsvSqlType extends AbstractType
+class CustomCsvExportType extends AbstractType
 {
     private $app;
 
@@ -43,7 +43,7 @@ class CsvSqlType extends AbstractType
                     )),
                 ),
             ))
-            ->add('csv_sql', 'textarea', array(
+            ->add('custom_csv_export', 'textarea', array(
                 'label' => 'SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)',
                 'constraints' => array(
                     new Asserts\SqlCheck(),
@@ -56,6 +56,6 @@ class CsvSqlType extends AbstractType
      */
     public function getName()
     {
-        return 'admin_csv_sql';
+        return 'admin_custom_csv_export';
     }
 }
