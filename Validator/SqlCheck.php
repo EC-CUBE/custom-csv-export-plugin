@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\CsvSql\Validator;
+namespace Plugin\CustomCsvExport\Validator;
 
 use Symfony\Component\Validator\Constraint;
 

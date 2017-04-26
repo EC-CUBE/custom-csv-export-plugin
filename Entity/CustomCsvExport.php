@@ -1,13 +1,13 @@
 <?php
 
-namespace Plugin\CsvSql\Entity;
+namespace Plugin\CustomCsvExport\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CsvSql
+ * CustomCsvExport
  */
-class CsvSql extends \Eccube\Entity\AbstractEntity
+class CustomCsvExport extends \Eccube\Entity\AbstractEntity
 {
     /**
      * @var integer
@@ -22,7 +22,7 @@ class CsvSql extends \Eccube\Entity\AbstractEntity
     /**
      * @var string
      */
-    private $csv_sql;
+    private $custom_sql;
 
     /**
      * @var \DateTime
@@ -53,7 +53,7 @@ class CsvSql extends \Eccube\Entity\AbstractEntity
      * Set sql_name
      *
      * @param string $sqlName
-     * @return CsvSql
+     * @return CustomCsvExport
      */
     public function setSqlName($sqlName)
     {
@@ -73,33 +73,33 @@ class CsvSql extends \Eccube\Entity\AbstractEntity
     }
 
     /**
-     * Set csv_sql
+     * Set custom_sql
      *
-     * @param string $csvSql
-     * @return CsvSql
+     * @param string $customCsvExport
+     * @return CustomCsvExport
      */
-    public function setCsvSql($csvSql)
+    public function setCustomSql($customSql)
     {
-        $this->csv_sql = $csvSql;
+        $this->custom_sql = $customSql;
 
         return $this;
     }
 
     /**
-     * Get csv_sql
+     * Get custom_sql
      *
      * @return string 
      */
-    public function getCsvSql()
+    public function getCustomSql()
     {
-        return $this->csv_sql;
+        return $this->custom_sql;
     }
 
     /**
      * Set create_date
      *
      * @param \DateTime $createDate
-     * @return CsvSql
+     * @return CustomCsvExport
      */
     public function setCreateDate($createDate)
     {
@@ -122,7 +122,7 @@ class CsvSql extends \Eccube\Entity\AbstractEntity
      * Set update_date
      *
      * @param \DateTime $updateDate
-     * @return CsvSql
+     * @return CustomCsvExport
      */
     public function setUpdateDate($updateDate)
     {
@@ -145,7 +145,7 @@ class CsvSql extends \Eccube\Entity\AbstractEntity
      * Set del_flg
      *
      * @param integer $delFlg
-     * @return CsvSql
+     * @return CustomCsvExport
      */
     public function setDelFlg($delFlg)
     {

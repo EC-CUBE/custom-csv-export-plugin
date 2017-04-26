@@ -1,7 +1,7 @@
-Plugin\CsvSql\Entity\CsvSql:
+Plugin\CustomCsvExport\Entity\CustomCsvExport:
     type: entity
-    table: plg_csv_sql
-    repositoryClass: Plugin\CsvSql\Repository\CsvSqlRepository
+    table: plg_custom_csv_export
+    repositoryClass: Plugin\CustomCsvExport\Repository\CustomCsvExportRepository
     id:
         id:
             type: integer
@@ -14,7 +14,7 @@ Plugin\CsvSql\Entity\CsvSql:
         sql_name:
             type: text
             nullable: false
-        csv_sql:
+        custom_sql:
             type: text
             nullable: false
         create_date:

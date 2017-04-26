@@ -8,10 +8,10 @@
 
 {% extends 'default_frame.twig' %}
 
-{% set menus = ['setting', 'shop', 'admin_csv_sql'] %}
+{% set menus = ['setting', 'shop', 'admin_custom_csv_export'] %}
 
 {% block title %}システム設定{% endblock %}
-{% block sub_title %}CSV出力高度な設定{% endblock %}
+{% block sub_title %}カスタムCSV出力{% endblock %}
 
 {% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
 
@@ -19,13 +19,13 @@
     <script>
         $(function() {
             $('#register_btn').click(function() {
-                $('#form1').attr('action', "{% if TargetCsvSql.id %}{{ path('admin_shop_csv_sql_edit', {id: TargetCsvSql.id}) }}{% else %}{{ url('admin_shop_csv_sql') }}{% endif %}");
+                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('admin_shop_custom_csv_export_edit', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('admin_shop_custom_csv_export') }}{% endif %}");
                 $('#form1').submit();
                 return false;
             });
 
             $('#check_btn').click(function() {
-                $('#form1').attr('action', "{% if TargetCsvSql.id %}{{ path('admin_shop_csv_sql_edit_confirm', {id: TargetCsvSql.id}) }}{% else %}{{ url('admin_shop_csv_sql_confirm') }}{% endif %}");
+                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('admin_shop_custom_csv_export_edit_confirm', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('admin_shop_custom_csv_export_confirm') }}{% endif %}");
                 $('#form1').submit();
                 return false;
             });
@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% block main %}
-    <div id="group_wrap" class="row">
+    <div id="aside_wrap" class="row">
 
         <div id="list_box" class="col-md-9">
 
@@ -45,34 +45,34 @@
                         <a>SQL一覧</a>
                     </div>
                 </div>
-                {% if CsvSqls|length > 0 %}
+                {% if CustomCsvExports|length > 0 %}
                     <div id="sortable_list" class="box-body no-padding no-border">
                         <div id="sortable_list_box" class="sortable_list">
                             <div id="sortable_list_box__list" class="tableish">
 
-                                {% for CsvSql in CsvSqls %}
+                                {% for CustomCsvExport in CustomCsvExports %}
 
-                                    <div id="sortable_list__item--{{ CsvSql.id }}" class="item_box tr" data-group-id="{{ CsvSql.id }}">
-                                        <div id="sortable_list__item_body--{{ CsvSql.id }}" class="item_pattern td">
-                                            <a href="{{ url('admin_shop_csv_sql_edit', {id: CsvSql.id}) }}">{{ CsvSql.sql_name }}</a>
+                                    <div id="sortable_list__item--{{ CustomCsvExport.id }}" class="item_box tr" data-group-id="{{ CustomCsvExport.id }}">
+                                        <div id="sortable_list__item_body--{{ CustomCsvExport.id }}" class="item_pattern td">
+                                            <a href="{{ url('admin_shop_custom_csv_export_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
                                         </div>
-                                        <div id="sortable_list__item_menu_box--{{ CsvSql.id }}" class="icon_edit td">
-                                            <div id="sortable_list__item_menu_toggle--{{ CsvSql.id }}" class="dropdown">
+                                        <div id="sortable_list__item_menu_box--{{ CustomCsvExport.id }}" class="icon_edit td">
+                                            <div id="sortable_list__item_menu_toggle--{{ CustomCsvExport.id }}" class="dropdown">
                                                 <a class="dropdown-toggle" data-toggle="dropdown">
                                                     <svg class="cb cb-ellipsis-h">
                                                         <use xlink:href="#cb-ellipsis-h"/>
                                                     </svg>
                                                 </a>
-                                                <ul id="sortable_list__menu--{{ CsvSql.id }}" class="dropdown-menu dropdown-menu-right">
+                                                <ul id="sortable_list__menu--{{ CustomCsvExport.id }}" class="dropdown-menu dropdown-menu-right">
 
                                                     <li>
-                                                        <a href="{{ url('admin_shop_csv_sql_delete', {id: CsvSql.id}) }}" {{ csrf_token_for_anchor() }} data-method="delete">
+                                                        <a href="{{ url('admin_shop_custom_csv_export_delete', {id: CustomCsvExport.id}) }}" {{ csrf_token_for_anchor() }} data-method="delete">
                                                             削除
                                                         </a>
                                                     </li>
 
                                                     <li>
-                                                        <a href="{{ url('admin_shop_csv_sql_output', {id: CsvSql.id}) }}">
+                                                        <a href="{{ url('admin_shop_custom_csv_export_output', {id: CustomCsvExport.id}) }}">
                                                             CSV出力
                                                         </a>
                                                     </li>
@@ -103,8 +103,8 @@
                 <div id="bread_crumb_box" class="box-header">
                     <div id="bread_crumb_box__body" class="box-title box-title-category">
                         <a>SQL設定
-                            {% if TargetCsvSql.id %}
-                                (編集中：{{ TargetCsvSql.sql_name }})
+                            {% if TargetCustomCsvExport.id %}
+                                (編集中：{{ TargetCustomCsvExport.sql_name }})
                             {% else %}
                                 (新規入力)
                             {% endif %}
@@ -118,7 +118,7 @@
                             <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action="" enctype="multipart/form-data">
                                 {{ form_widget(form._token) }}
                                 {{ form_row(form.sql_name, {attr: {placeholder: '保存するSQL名を入力'}}) }}
-                                {{ form_row(form.csv_sql, {attr: {placeholder: 'SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。'}}) }}
+                                {{ form_row(form.custom_sql, {attr: {placeholder: 'SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。'}}) }}
                                 <div class="col-sm-0 col-sm-offset-3 col-md-12 col-md-offset-0">
                                     <button id="check_btn" class="btn btn-primary btn-block btn-lg">SQLチェック</button>
                                 </div>

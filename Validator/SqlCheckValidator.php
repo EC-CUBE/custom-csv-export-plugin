@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\CsvSql\Validator;
+namespace Plugin\CustomCsvExport\Validator;
 
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraint;
@@ -60,10 +60,10 @@ class SqlCheckValidator extends ConstraintValidator
 
         $denyList = $this->lfGetSqlDenyList();
 
-        foreach ($denyList as $keyword) {
-            if (preg_match('/'.$keyword.'/', $sql)) {
+        $prohibitedStr = str_replace(array('|', '/'), array('\|', '\/'), $denyList);
+	$pattern = '/' . join('|', $prohibitedStr) . '/i';
+	if (preg_match_all($pattern, $sql, $matches)) {
                 $error = true;
-            }
         }
 
         return $error;
@@ -81,63 +81,61 @@ class SqlCheckValidator extends ConstraintValidator
     {
         $arrList = array(
             ';',
-            'SELECT',
-            'CREATE',
-            'INSERT',
-            'UPDATE',
-            'DELETE',
-            'ALTER',
-            'ABORT',
-            'ANALYZE',
-            'CLUSTER',
-            'COMMENT',
-            'COPY',
-            'DECLARE',
-            'DISCARD',
-            'DO',
-            'DROP',
-            'EXECUTE',
-            'EXPLAIN',
-            'GRANT',
-            'LISTEN',
-            'LOAD',
-            'LOCK',
-            'NOTIFY',
-            'PREPARE',
-            'REASSIGN',
-            // 'REINDEX\s', // REINDEXは許可で良いかなと
+            'CREATE\s',
+            'INSERT\s',
+            'UPDATE\s',
+            'DELETE\s',
+            'ALTER\s',
+            'ABORT\s',
+            'ANALYZE\s',
+            'CLUSTER\s',
+            'COMMENT\s',
+            'COPY\s',
+            'DECLARE\s',
+            'DISCARD\s',
+            'DO\s',
+            'DROP\s',
+            'EXECUTE\s',
+            'EXPLAIN\s',
+            'GRANT\s',
+            'LISTEN\s',
+            'LOAD\s',
+            'LOCK\s',
+            'NOTIFY\s',
+            'PREPARE\s',
+            'REASSIGN\s',
             'RELEASE\sSAVEPOINT',
-            'RENAME',
-            'REST',
-            'REVOKE',
-            'SAVEPOINT',
+            'RENAME\s',
+            'REST\s',
+            'REVOKE\s',
+            'SAVEPOINT\s',
             '\sSET\s', // OFFSETを誤検知しないように先頭・末尾に\sを指定
-            'SHOW',
+            'SHOW\s',
             'START\sTRANSACTION',
-            'TRUNCATE',
-            'UNLISTEN',
-            'VACCUM',
-            'HANDLER',
+            'TRUNCATE\s',
+            'UNLISTEN\s',
+            'VACCUM\s',
+            'HANDLER\s',
             'LOAD\sDATA\s',
-            'LOAD\sXML',
-            'REPLACE',
-            'OPTIMIZE',
-            'REPAIR',
-            'INSTALL\sPLUGIN',
-            'UNINSTALL\sPLUGIN',
-            'BINLOG',
-            'KILL',
-            'RESET',
-            'PURGE',
+            'LOAD\sXML\s',
+            'REPLACE\s',
+            'OPTIMIZE\s',
+            'REPAIR\s',
+            'INSTALL\sPLUGIN\s',
+            'UNINSTALL\sPLUGIN\s',
+            'BINLOG\s',
+            'KILL\s',
+            'RESET\s',
+            'PURGE\s',
             'CHANGE\sMASTER',
             'START\sSLAVE',
             'STOP\sSLAVE',
             'MASTER\sPOS\sWAIT',
-            'SIGNAL',
-            'RESIGNAL',
-            'RETURN',
-            'USE',
-            'HELP',
+            'SIGNAL\s',
+            'RESIGNAL\s',
+            'RETURN\s',
+            'USE\s',
+            'HELP\s',
         );
 
         return $arrList;

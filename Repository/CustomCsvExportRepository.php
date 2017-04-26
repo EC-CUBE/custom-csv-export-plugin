@@ -8,37 +8,37 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\CsvSql\Repository;
+namespace Plugin\CustomCsvExport\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Eccube\Common\Constant;
-use Plugin\CsvSql\Entity\CsvSql;
+use Plugin\CustomCsvExport\Entity\CustomCsvExport;
 
-class CsvSqlRepository extends EntityRepository
+class CustomCsvExportRepository extends EntityRepository
 {
     /**
      * 設定SQL一覧を取得する.
      *
-     * @return \Plugin\CsvSql\Entity\CsvSql[] 設定SQLの配列
+     * @return \Plugin\CustomCsvExport\Entity\CustomCsvExport[] 設定SQLの配列
      */
     public function getList()
     {
         $qb = $this->createQueryBuilder('cs');
-        $CsvSqls = $qb->getQuery()->getResult();
+        $CustomCsvExports = $qb->getQuery()->getResult();
 
-        return $CsvSqls;
+        return $CustomCsvExports;
     }
 
     /**
      * CSV出力用の設定SQL実行結果を取得する.
      *
-     * @param $csv_sql SQL文
+     * @param $custom_csv_export SQL文
      * @return array 実行結果
      */
-    public function getArrayList($csv_sql)
+    public function getArrayList($custom_csv_export)
     {
         $em = $this->getEntityManager();
-        $qb = $em->getConnection()->prepare('SELECT '.$csv_sql);
+        $qb = $em->getConnection()->prepare('SELECT '.$custom_csv_export);
         $qb->execute();
         $result = $qb->fetchAll();
 
@@ -64,23 +64,23 @@ class CsvSqlRepository extends EntityRepository
     /**
      * 設定SQLを保存する.
      *
-     * @param CsvSql $CsvSql 設定SQL
+     * @param CustomCsvExport $CustomCsvExport 設定SQL
      * @return bool 成功した場合 true
      */
-    public function save(CsvSql $CsvSql)
+    public function save(CustomCsvExport $CustomCsvExport)
     {
         $em = $this->getEntityManager();
         $em->getConnection()->beginTransaction();
         try {
-            if (!$CsvSql->getId()) {
-                $CsvSql->setDelFlg(0);
+            if (!$CustomCsvExport->getId()) {
+                $CustomCsvExport->setDelFlg(0);
 
                 $em->createQueryBuilder('cs')
-                    ->update('Plugin\CsvSql\Entity\CsvSql', 'cs')
+                    ->update('Plugin\CustomCsvExport\Entity\CustomCsvExport', 'cs')
                     ->getQuery();
             }
 
-            $em->persist($CsvSql);
+            $em->persist($CustomCsvExport);
             $em->flush();
 
             $em->getConnection()->commit();
@@ -96,15 +96,15 @@ class CsvSqlRepository extends EntityRepository
     /**
      * 設定SQLを削除する.
      *
-     * @param CsvSql $CsvSql 削除対象の設定SQL
+     * @param CustomCsvExport $CustomCsvExport 削除対象の設定SQL
      * @return bool 成功した場合 true
      */
-    public function delete(CsvSql $CsvSql)
+    public function delete(CustomCsvExport $CustomCsvExport)
     {
         $em = $this->getEntityManager();
         $em->getConnection()->beginTransaction();
         try {
-            $CsvSql->setDelFlg(Constant::ENABLED);
+            $CustomCsvExport->setDelFlg(Constant::ENABLED);
             $em->flush();
 
             $em->getConnection()->commit();

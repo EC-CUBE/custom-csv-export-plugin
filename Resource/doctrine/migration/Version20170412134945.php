@@ -15,7 +15,7 @@ class Version20170412134945 extends AbstractMigration
 {
 
     protected $entities = array(
-        'Plugin\CsvSql\Entity\CsvSql',
+        'Plugin\CustomCsvExport\Entity\CustomCsvExport',
     );
 
     /**
