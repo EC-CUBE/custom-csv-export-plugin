@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Related Product plugin
+ * This file is part of the Custom Csv Export Plugin
  *
  * Copyright (C) 2017 LOCKON CO.,LTD. All Rights Reserved.
  *
