@@ -57,7 +57,7 @@ class CustomCsvExportController extends AbstractController
                     if ($status) {
                         $app->addSuccess('SQLを保存しました。', 'admin');
 
-                        return $app->redirect($app->url('admin_shop_custom_csv_export'));
+                        return $app->redirect($app->url('plugin_custom_csv_export'));
                     } else {
                         $app->addError('SQLを保存できませんでした。', 'admin');
                     }
@@ -95,7 +95,7 @@ class CustomCsvExportController extends AbstractController
         if (!$TargetCustomCsvExport) {
             $app->deleteMessage();
 
-            return $app->redirect($app->url('admin_shop_custom_csv_export'));
+            return $app->redirect($app->url('plugin_custom_csv_export'));
         }
 
         $status = $app['custom_csv_export.repository.custom_csv_export']->delete($TargetCustomCsvExport);
@@ -106,7 +106,7 @@ class CustomCsvExportController extends AbstractController
             $app->addError('SQLを削除できませんでした。', 'admin');
         }
 
-        return $app->redirect($app->url('admin_shop_custom_csv_export'));
+        return $app->redirect($app->url('plugin_custom_csv_export'));
     }
 
     /**
@@ -177,7 +177,7 @@ class CustomCsvExportController extends AbstractController
 
         $app->addError('CSVを出力できませんでした。', 'admin');
 
-        return $app->redirect($app->url('admin_shop_custom_csv_export'));
+        return $app->redirect($app->url('plugin_custom_csv_export'));
     }
 
     /**

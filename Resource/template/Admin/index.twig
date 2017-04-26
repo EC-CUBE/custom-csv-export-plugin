@@ -19,13 +19,13 @@
     <script>
         $(function() {
             $('#register_btn').click(function() {
-                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('admin_shop_custom_csv_export_edit', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('admin_shop_custom_csv_export') }}{% endif %}");
+                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('plugin_custom_csv_export_edit', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('plugin_custom_csv_export') }}{% endif %}");
                 $('#form1').submit();
                 return false;
             });
 
             $('#check_btn').click(function() {
-                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('admin_shop_custom_csv_export_edit_confirm', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('admin_shop_custom_csv_export_confirm') }}{% endif %}");
+                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('plugin_custom_csv_export_edit_confirm', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('plugin_custom_csv_export_confirm') }}{% endif %}");
                 $('#form1').submit();
                 return false;
             });
@@ -54,7 +54,7 @@
 
                                     <div id="sortable_list__item--{{ CustomCsvExport.id }}" class="item_box tr" data-group-id="{{ CustomCsvExport.id }}">
                                         <div id="sortable_list__item_body--{{ CustomCsvExport.id }}" class="item_pattern td">
-                                            <a href="{{ url('admin_shop_custom_csv_export_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
+                                            <a href="{{ url('plugin_custom_csv_export_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
                                         </div>
                                         <div id="sortable_list__item_menu_box--{{ CustomCsvExport.id }}" class="icon_edit td">
                                             <div id="sortable_list__item_menu_toggle--{{ CustomCsvExport.id }}" class="dropdown">
@@ -66,13 +66,13 @@
                                                 <ul id="sortable_list__menu--{{ CustomCsvExport.id }}" class="dropdown-menu dropdown-menu-right">
 
                                                     <li>
-                                                        <a href="{{ url('admin_shop_custom_csv_export_delete', {id: CustomCsvExport.id}) }}" {{ csrf_token_for_anchor() }} data-method="delete">
+                                                        <a href="{{ url('plugin_custom_csv_export_delete', {id: CustomCsvExport.id}) }}" {{ csrf_token_for_anchor() }} data-method="delete">
                                                             削除
                                                         </a>
                                                     </li>
 
                                                     <li>
-                                                        <a href="{{ url('admin_shop_custom_csv_export_output', {id: CustomCsvExport.id}) }}">
+                                                        <a href="{{ url('plugin_custom_csv_export_output', {id: CustomCsvExport.id}) }}">
                                                             CSV出力
                                                         </a>
                                                     </li>
