@@ -27,12 +27,12 @@ class CustomCsvExportServiceProvider implements ServiceProviderInterface
             $admin->requireHttps();
         }
 
-        $admin->match('/setting/shop/custom_csv_export', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::index')->bind('admin_shop_custom_csv_export');
-        $admin->match('/setting/shop/custom_csv_export/{id}/edit', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::index')->assert('id', '\d+')->bind('admin_shop_custom_csv_export_edit');
-        $admin->delete('/setting/shop/custom_csv_export/{id}/delete', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::delete')->assert('id', '\d+')->bind('admin_shop_custom_csv_export_delete');
-        $admin->match('/setting/shop/custom_csv_export/{id}/output', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::csvOutput')->assert('id', '\d+')->bind('admin_shop_custom_csv_export_output');
-        $admin->match('/setting/shop/custom_csv_export/{id}/confirm', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::sqlConfirm')->assert('id', '\d+')->bind('admin_shop_custom_csv_export_edit_confirm');
-        $admin->match('/setting/shop/custom_csv_export/confirm', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::sqlConfirm')->bind('admin_shop_custom_csv_export_confirm');
+        $admin->match('/setting/shop/custom_csv_export', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::index')->bind('plugin_custom_csv_export');
+        $admin->match('/setting/shop/custom_csv_export/{id}/edit', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::index')->assert('id', '\d+')->bind('plugin_custom_csv_export_edit');
+        $admin->delete('/setting/shop/custom_csv_export/{id}/delete', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::delete')->assert('id', '\d+')->bind('plugin_custom_csv_export_delete');
+        $admin->match('/setting/shop/custom_csv_export/{id}/output', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::csvOutput')->assert('id', '\d+')->bind('plugin_custom_csv_export_output');
+        $admin->match('/setting/shop/custom_csv_export/{id}/confirm', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::sqlConfirm')->assert('id', '\d+')->bind('plugin_custom_csv_export_edit_confirm');
+        $admin->match('/setting/shop/custom_csv_export/confirm', 'Plugin\CustomCsvExport\Controller\CustomCsvExportController::sqlConfirm')->bind('plugin_custom_csv_export_confirm');
 
         $app->mount('/'.trim($app['config']['admin_route'], '/').'/', $admin);
 
@@ -53,7 +53,7 @@ class CustomCsvExportServiceProvider implements ServiceProviderInterface
             $config['nav'][4]['child'][0]['child'][] = array(
                 'id' => 'admin_custom_csv_export',
                 'name' => 'カスタムCSV出力',
-                'url' => 'admin_shop_custom_csv_export',
+                'url' => 'plugin_custom_csv_export',
             );
 
             return $config;
