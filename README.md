@@ -16,20 +16,6 @@
 ### その他
 
 #### SQL作成時注意点
-- DBMSの製品・バージョン違いによる記述形式の違いについて  
-バージョンのDBMS（Postgre8.4等）によっては、
-SQLの記述方式が異なる場合がございますので、ご注意下さい。
-
-具体例）
-Postgre8.4では日本語等を囲む際、
-シングルクォートではなく、ダブルクォートを使用する必要がある。
-```
-NG）device_type_id AS '漢字セイ' FROM dtb_block
-```
-```
-OK）device_type_id AS "漢字セイ" FROM dtb_block
-```
-
 - DB名、カラム名は「`」で囲む。  
 ```
   例）`id` AS 'ID', `rank` AS 'ランク' FROM `mtb_sex`
@@ -49,4 +35,18 @@ OK）device_type_id AS "漢字セイ" FROM dtb_block
 #### 実行不可SQL
 - UPDATE文
 - DELETE文
+
+- DBMSの製品・バージョン違いによる記述形式の違いについて  
+バージョンのDBMS（Postgre8.4等）によっては、
+SQLの記述方式が異なる場合がございますので、ご注意下さい。
+
+具体例）
+Postgre8.4では日本語等を囲む際、
+シングルクォートではなく、ダブルクォートを使用する必要がある。
+```
+NG）device_type_id AS '漢字セイ' FROM dtb_block
+```
+```
+OK）device_type_id AS "漢字セイ" FROM dtb_block
+```
 
