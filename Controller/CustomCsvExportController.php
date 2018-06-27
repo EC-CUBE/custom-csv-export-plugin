@@ -10,28 +10,42 @@
 
 namespace Plugin\CustomCsvExport\Controller;
 
-use Eccube\Application;
 use Eccube\Controller\AbstractController;
 use Plugin\CustomCsvExport\Entity\CustomCsvExport;
+use Plugin\CustomCsvExport\Form\Type\CustomCsvExportType;
+use Plugin\CustomCsvExport\Repository\CustomCsvExportRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CustomCsvExportController extends AbstractController
 {
+    /** @var  CustomCsvExportRepository */
+    protected $customCsvExportRepository;
 
     /**
-     * CSV一覧画面
+     * CustomCsvExportController constructor.
+     * @param CustomCsvExportRepository $customCsvExportRepository
+     */
+    public function __construct(CustomCsvExportRepository $customCsvExportRepository)
+    {
+        $this->customCsvExportRepository = $customCsvExportRepository;
+    }
+
+
+    /**
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export", name="plugin_custom_csv_export")
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/edit", requirements={"id" = "\d+"}, name="plugin_custom_csv_export_edit")
      *
-     * @param Application $app
      * @param Request $request
      * @param null $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(Application $app, Request $request, $id = null)
+    public function index(Request $request, $id = null)
     {
         if ($id) {
-            $TargetCustomCsvExport = $app['custom_csv_export.repository.custom_csv_export']->find($id);
+            $TargetCustomCsvExport = $this->customCsvExportRepository->find($id);
             if (!$TargetCustomCsvExport) {
                 throw new NotFoundHttpException();
             }
@@ -39,7 +53,7 @@ class CustomCsvExportController extends AbstractController
             $TargetCustomCsvExport = new CustomCsvExport();
         }
 
-        $builder = $app['form.factory']->createBuilder('admin_custom_csv_export', $TargetCustomCsvExport);
+        $builder = $this->formFactory->createBuilder(CustomCsvExportType::class, $TargetCustomCsvExport);
 
         $form = $builder->getForm();
 
@@ -49,29 +63,29 @@ class CustomCsvExportController extends AbstractController
 
             $sql = 'SELECT '.$form['custom_sql']->getData();
             try {
-                $result = $app['custom_csv_export.repository.custom_csv_export']->query($sql);
+                $result = $this->customCsvExportRepository->query($sql);
 
                 if ($result) {
-                    $status = $app['custom_csv_export.repository.custom_csv_export']->save($TargetCustomCsvExport);
+                    $status = $this->customCsvExportRepository->save($TargetCustomCsvExport);
 
                     if ($status) {
-                        $app->addSuccess('SQLを保存しました。', 'admin');
+                        $this->addSuccess('SQLを保存しました。', 'admin');
 
-                        return $app->redirect($app->url('plugin_custom_csv_export'));
+                        return $this->redirect($this->generateUrl('plugin_custom_csv_export'));
                     } else {
-                        $app->addError('SQLを保存できませんでした。', 'admin');
+                        $this->addError('SQLを保存できませんでした。', 'admin');
                     }
                 } else {
-                    $app->addError('SQLを保存できませんでした。', 'admin');
+                    $this->addError('SQLを保存できませんでした。', 'admin');
                 }
             } catch (\Exception $e) {
-                $app->addError('SQLを保存できませんでした。SQL文を正しく入力してください。', 'admin');
+                $this->addError('SQLを保存できませんでした。SQL文を正しく入力してください。', 'admin');
             }
         }
 
-        $CustomCsvExports = $app['custom_csv_export.repository.custom_csv_export']->getList();
+        $CustomCsvExports = $this->customCsvExportRepository->getList();
 
-        return $app->render('CustomCsvExport/Resource/template/Admin/index.twig', array(
+        return $this->render('CustomCsvExport/Resource/template/Admin/index.twig', array(
             'form' => $form->createView(),
             'CustomCsvExports' => $CustomCsvExports,
             'TargetCustomCsvExport' => $TargetCustomCsvExport,
@@ -79,60 +93,58 @@ class CustomCsvExportController extends AbstractController
     }
 
     /**
-     * CSV削除
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/delete", requirements={"id" = "\d+"}, name="plugin_custom_csv_export_delete")
      *
-     * @param Application $app
      * @param Request $request
      * @param $id
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function delete(Application $app, Request $request, $id)
+    public function delete(Request $request, $id)
     {
-        $this->isTokenValid($app);
+        $this->isTokenValid();
 
-        $TargetCustomCsvExport = $app['custom_csv_export.repository.custom_csv_export']->find($id);
+        $TargetCustomCsvExport = $this->customCsvExportRepository->find($id);
 
         if (!$TargetCustomCsvExport) {
-            $app->deleteMessage();
+            $this->deleteMessage();
 
-            return $app->redirect($app->url('plugin_custom_csv_export'));
+            return $this->redirectToRoute('plugin_custom_csv_export');
         }
 
-        $status = $app['custom_csv_export.repository.custom_csv_export']->delete($TargetCustomCsvExport);
+        $status = $this->customCsvExportRepository->delete($TargetCustomCsvExport);
 
         if ($status) {
-            $app->addSuccess('SQLを削除しました。', 'admin');
+            $this->addSuccess('SQLを削除しました。', 'admin');
         } else {
-            $app->addError('SQLを削除できませんでした。', 'admin');
+            $this->addError('SQLを削除できませんでした。', 'admin');
         }
 
-        return $app->redirect($app->url('plugin_custom_csv_export'));
+        return $this->redirectToRoute('plugin_custom_csv_export');
     }
 
     /**
-     * CSV出力.
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/output", requirements={"id" = "\d+"}, name="plugin_custom_csv_export_output")
      *
-     * @param Application $app
      * @param Request $request
      * @param null $id
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|StreamedResponse
      */
-    public function csvOutput(Application $app, Request $request, $id = null)
+    public function csvOutput(Request $request, $id = null)
     {
         set_time_limit(0);
 
         // sql loggerを無効にする.
-        $em = $app['orm.em'];
+        $em = $this->entityManager;
         $em->getConfiguration()->setSQLLogger(null);
 
-        $TargetCustomCsvExport = $app['custom_csv_export.repository.custom_csv_export']->find($id);
+        $TargetCustomCsvExport = $this->customCsvExportRepository->find($id);
         if (!$TargetCustomCsvExport) {
             throw new NotFoundHttpException();
         }
 
         $response = new StreamedResponse();
 
-        $csv_data = $app['custom_csv_export.repository.custom_csv_export']->getArrayList($TargetCustomCsvExport->getCustomSql());
+        $csv_data = $this->customCsvExportRepository->getArrayList($TargetCustomCsvExport->getCustomSql());
 
         if (count($csv_data) > 0) {
 
@@ -141,25 +153,25 @@ class CustomCsvExportController extends AbstractController
             foreach ($csv_data as $csv_row) {
   
                 foreach ($csv_row as $key => $value) {
-                    $csv_header[$key] = mb_convert_encoding($key, $app['config']['csv_export_encoding'], 'UTF-8');
+                    $csv_header[$key] = mb_convert_encoding($key, $this->eccubeConfig['eccube_csv_export_encoding'], 'UTF-8');
                 }
                 break;
             }
 
-            $response->setCallback(function () use ($app, $request, $csv_header, $csv_data) {
+            $response->setCallback(function () use ($request, $csv_header, $csv_data) {
 
                 $fp = fopen('php://output', 'w');
                 // ヘッダー行の出力
-                fputcsv($fp, $csv_header, $app['config']['csv_export_separator']);
+                fputcsv($fp, $csv_header, $this->eccubeConfig['eccube_csv_export_separator']);
 
                 // データを出力
                 foreach ($csv_data as $csv_row) {
                     $row = array();
                     foreach ($csv_header as $headerKey => $header_name) {
-                        mb_convert_variables($app['config']['csv_export_encoding'], 'UTF-8', $csv_row[$headerKey]);
+                        mb_convert_variables($this->eccubeConfig['eccube_csv_export_encoding'], 'UTF-8', $csv_row[$headerKey]);
                         $row[] = $csv_row[$headerKey];
                     }
-                    fputcsv($fp, $row, $app['config']['csv_export_separator']);
+                    fputcsv($fp, $row, $this->eccubeConfig['eccube_csv_export_separator']);
                 }
 
                 fclose($fp);
@@ -175,23 +187,22 @@ class CustomCsvExportController extends AbstractController
             return $response;
         }
 
-        $app->addError('CSVを出力できませんでした。', 'admin');
+        $this->addError('CSVを出力できませんでした。', 'admin');
 
-        return $app->redirect($app->url('plugin_custom_csv_export'));
+        return $this->redirectToRoute('plugin_custom_csv_export');
     }
 
     /**
-     * SQL確認.
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/confirm", name="plugin_custom_csv_export_confirm")
      *
-     * @param Application $app
      * @param Request $request
      * @param null $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function sqlConfirm(Application $app, Request $request, $id = null)
+    public function sqlConfirm(Request $request, $id = null)
     {
         if ($id) {
-            $TargetCustomCsvExport = $app['custom_csv_export.repository.custom_csv_export']->find($id);
+            $TargetCustomCsvExport = $this->customCsvExportRepository->find($id);
             if (!$TargetCustomCsvExport) {
                 throw new NotFoundHttpException();
             }
@@ -199,19 +210,19 @@ class CustomCsvExportController extends AbstractController
             $TargetCustomCsvExport = new CustomCsvExport();
         }
 
-        $builder = $app['form.factory']->createBuilder('admin_custom_csv_export', $TargetCustomCsvExport);
+        $builder = $this->formFactory->createBuilder(CustomCsvExportType::class, $TargetCustomCsvExport);
 
         $form = $builder->getForm();
 
         $form->handleRequest($request);
 
-        $message = null;
+        $message = 'test message';
         if ($form->isSubmitted() && $form->isValid()) {
 
             if (!is_null($form['custom_sql']->getData())) {
                 $sql = 'SELECT '.$form['custom_sql']->getData();
                 try {
-                    $result = $app['custom_csv_export.repository.custom_csv_export']->query($sql);
+                    $result = $this->customCsvExportRepository->query($sql);
                     if ($result) {
                         $message = 'エラーはありません。';
                     } else {
@@ -223,9 +234,9 @@ class CustomCsvExportController extends AbstractController
             }
         }
 
-        $CustomCsvExports = $app['custom_csv_export.repository.custom_csv_export']->getList();
+        $CustomCsvExports = $this->customCsvExportRepository->getList();
 
-        return $app->render('CustomCsvExport/Resource/template/Admin/index.twig', array(
+        return $this->render('CustomCsvExport/Resource/template/Admin/index.twig', array(
             'form' => $form->createView(),
             'CustomCsvExports' => $CustomCsvExports,
             'message' => $message,

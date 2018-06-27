@@ -8,25 +8,25 @@
 #}
 
 
-{% extends 'default_frame.twig' %}
+{% extends '@admin/styleguide_frame.twig' %}
 
-{% set menus = ['setting', 'shop', 'admin_custom_csv_export'] %}
+{% set menus = ['setting', 'admin_custom_csv_export'] %}
 
 {% block title %}システム設定{% endblock %}
 {% block sub_title %}カスタムCSV出力{% endblock %}
 
-{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
 
 {% block javascript %}
     <script>
-        $(function() {
-            $('#register_btn').click(function() {
+        $(function () {
+            $('#register_btn').click(function () {
                 $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('plugin_custom_csv_export_edit', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('plugin_custom_csv_export') }}{% endif %}");
                 $('#form1').submit();
                 return false;
             });
 
-            $('#check_btn').click(function() {
+            $('#check_btn').click(function () {
                 $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('plugin_custom_csv_export_edit_confirm', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('plugin_custom_csv_export_confirm') }}{% endif %}");
                 $('#form1').submit();
                 return false;
@@ -36,135 +36,145 @@
 {% endblock %}
 
 {% block main %}
-    <div id="aside_wrap" class="row">
+    <div class="c-contentsArea__cols">
+        <div class="c-contentsArea__primaryCol">
+            <div class="c-primaryCol">
+                <div class="card rounded border-0 mb-4">
+                    <div class="card-header">
+                        <h4 class="box-title font-weight-bold">SQL一覧</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if CustomCsvExports|length > 0 %}
+                            <table class="table table-sm">
+                                <thead>
+                                <tr>
+                                    <th class="border-top-0 pl-3 pt-2 pb-2">{{ 'admin.store.plugin_table.887'|trans }}</th>
+                                    <th class="border-top-0 pt-2 pb-2">{{ 'admin.store.plugin_table.888'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for CustomCsvExport in CustomCsvExports %}
+                                    <tr>
+                                        <td class="align-middle pl-3"><a
+                                                    href="{{ url('plugin_custom_csv_export_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
+                                        </td>
+                                        <td class="align-middle pl-3">
+                                            <ul id="sortable_list__menu--{{ CustomCsvExport.id }}"
+                                                class="dropdown-menu dropdown-menu-right">
+                                                <li>
+                                                    <a href="{{ url('plugin_custom_csv_export_delete', {id: CustomCsvExport.id}) }}" {{ csrf_token_for_anchor() }}
+                                                       data-method="delete">
+                                                        削除
+                                                    </a>
+                                                </li>
 
-        <div id="list_box" class="col-md-9">
+                                                <li>
+                                                    <a href="{{ url('plugin_custom_csv_export_output', {id: CustomCsvExport.id}) }}">
+                                                        CSV出力
+                                                    </a>
+                                                </li>
 
-            <div id="list_box__body" class="box">
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div id="list_box" class="box-body no-padding">
+                                <div id="list_box__not_find_category" class="data-empty">
+                                    <p>データはありません</p></div>
+                            </div><!-- /.box-body -->
+                        {% endif %}
+                    </div>
 
-                <div id="bread_crumb_box" class="box-header">
-                    <div id="bread_crumb_box__body" class="box-title box-title-category">
-                        <a>SQL一覧</a>
+                    <div class="card-body">
+                        <div class="row">
+                            {% if CustomCsvExports|length > 0 %}
+                                <div id="sortable_list" class="box-body no-padding no-border">
+                                    <div id="sortable_list_box" class="sortable_list">
+                                        <div id="sortable_list_box__list" class="tableish">
+
+                                        </div>
+                                    </div>
+                                </div><!-- /.box-body -->
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-                {% if CustomCsvExports|length > 0 %}
-                    <div id="sortable_list" class="box-body no-padding no-border">
-                        <div id="sortable_list_box" class="sortable_list">
-                            <div id="sortable_list_box__list" class="tableish">
 
-                                {% for CustomCsvExport in CustomCsvExports %}
-
-                                    <div id="sortable_list__item--{{ CustomCsvExport.id }}" class="item_box tr" data-group-id="{{ CustomCsvExport.id }}">
-                                        <div id="sortable_list__item_body--{{ CustomCsvExport.id }}" class="item_pattern td">
-                                            <a href="{{ url('plugin_custom_csv_export_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
-                                        </div>
-                                        <div id="sortable_list__item_menu_box--{{ CustomCsvExport.id }}" class="icon_edit td">
-                                            <div id="sortable_list__item_menu_toggle--{{ CustomCsvExport.id }}" class="dropdown">
-                                                <a class="dropdown-toggle" data-toggle="dropdown">
-                                                    <svg class="cb cb-ellipsis-h">
-                                                        <use xlink:href="#cb-ellipsis-h"/>
-                                                    </svg>
-                                                </a>
-                                                <ul id="sortable_list__menu--{{ CustomCsvExport.id }}" class="dropdown-menu dropdown-menu-right">
-
-                                                    <li>
-                                                        <a href="{{ url('plugin_custom_csv_export_delete', {id: CustomCsvExport.id}) }}" {{ csrf_token_for_anchor() }} data-method="delete">
-                                                            削除
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="{{ url('plugin_custom_csv_export_output', {id: CustomCsvExport.id}) }}">
-                                                            CSV出力
-                                                        </a>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div><!-- /.item_box -->
-                                {% endfor %}
-
-                            </div>
-                        </div>
-                    </div><!-- /.box-body -->
-                {% else %}
-                    <div id="list_box" class="box-body no-padding">
-                        <div id="list_box__not_find_category" class="data-empty">
-                            <svg class="cb cb-inbox">
-                                <use xlink:href="#cb-inbox"/>
-                            </svg>
-                            <p>データはありません</p></div>
-                    </div><!-- /.box-body -->
-                {% endif %}
-                <!-- ▲ データがある時 ▲ -->
-            </div><!-- /.box -->
-
-            <div id="edit_box" class="box">
-
-                <div id="bread_crumb_box" class="box-header">
-                    <div id="bread_crumb_box__body" class="box-title box-title-category">
-                        <a>SQL設定
+                <div class="card rounded border-0 mb-4">
+                    <div class="card-header">
+                        <h4 class="box-title font-weight-bold">SQL設定
                             {% if TargetCustomCsvExport.id %}
                                 (編集中：{{ TargetCustomCsvExport.sql_name }})
                             {% else %}
                                 (新規入力)
-                            {% endif %}
-                        </a>
+                            {% endif %}</h4>
                     </div>
-                </div><!-- /.box-header -->
-
-                <div id="edit_box" class="box-body">
-                    <div id="edit_box__body" class="row">
-                        <div id="edit_box__body_inner" class="col-md-12">
-                            <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action="" enctype="multipart/form-data">
-                                {{ form_widget(form._token) }}
-                                {{ form_row(form.sql_name, {attr: {placeholder: '保存するSQL名を入力'}}) }}
-                                {{ form_row(form.custom_sql, {attr: {placeholder: 'SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。'}}) }}
-                                <div class="col-sm-0 col-sm-offset-3 col-md-12 col-md-offset-0">
-                                    <button id="check_btn" class="btn btn-primary btn-block btn-lg">SQLチェック</button>
+                    <div class="card-body">
+                        <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action=""
+                              enctype="multipart/form-data">
+                            {{ form_widget(form._token) }}
+                            <div class="row form-group">
+                                <div class="col-12 col-sm-2"><span>名称</span>
                                 </div>
-                            </form>
+                                <div class="col-auto col-sm-10">
+                                    {{ form_widget(form.sql_name, {attr: {placeholder: '保存するSQL名を入力'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-12 col-sm-2"><span>SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)</span>
+                                </div>
+                                <div class="col-auto col-sm-10">
+                                    {{ form_widget(form.custom_sql, {attr: {rows: 6, placeholder: 'SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-10 pull-right">
+                                    <div class="row">
+                                        <button id="check_btn" class="btn btn-primary btn-block btn-lg">SQLチェック</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {% if message is defined and message is not null %}
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <h4 class="box-title font-weight-bold">SQL確認結果</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="list_box" class="box-body no-padding">
+                                <pre>{{ message }}</pre>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box-body -->
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="c-conversionArea">
+        <div class="c-conversionArea__container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-6">
+                    <div class="c-conversionArea__leftBlockItem">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row align-items-center justify-content-end">
+                        <div class="col-auto">
+                            <button id="register_btn" class="btn btn-ec-conversion px-5" type="submit">登録</button>
                         </div>
                     </div>
-                </div><!-- /.box-body -->
-
-            </div><!-- /.box -->
-
-            {% if message is defined and message is not null %}
-                <div id="edit_box" class="box">
-
-                    <div id="bread_crumb_box" class="box-header">
-                        <div id="bread_crumb_box__body" class="box-title box-title-category">
-                            <a>SQL確認結果</a>
-                        </div>
-                    </div><!-- /.box-header -->
-
-                    <div id="list_box" class="box-body no-padding">
-                        <div id="list_box__not_search_sql" style="padding: 1.5em;">
-                            <pre>{{ message }}</pre>
-                        </div>
-                    </div><!-- /.box-body -->
-
-                </div><!-- /.box -->
-            {% endif %}
-
-
-        </div><!-- /.col -->
-
-        <div class="col-md-3" id="aside_column">
-            <div id="common_box" class="col_inner">
-                <div id="common_button_box" class="box no-header">
-                    <div id="common_button_box__body" class="box-body">
-                        <div id="common_button_box__insert_button_area" class="row text-center">
-                            <div class="col-sm-6 col-sm-offset-3 col-md-12 col-md-offset-0">
-                                <button id="register_btn" class="btn btn-primary btn-block btn-lg">登録</button>
-                            </div>
-                        </div>
-                    </div><!-- /.box-body -->
-                </div><!-- /.box -->
-            </div><!-- /.box -->
-        </div><!-- /.col -->
-
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

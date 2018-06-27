@@ -14,36 +14,53 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CustomCsvExport
+ *
+ * @ORM\Table(name="plg_custom_csv_export")
+ * @ORM\Entity(repositoryClass="Plugin\CustomCsvExport\Repository\CustomCsvExportRepository")
  */
 class CustomCsvExport extends \Eccube\Entity\AbstractEntity
 {
     /**
-     * @var integer
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", options={"unsigned":true})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="sql_name", type="string")
      */
     private $sql_name;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="custom_sql", type="text")
      */
     private $custom_sql;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="create_date", type="datetimetz")
      */
     private $create_date;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="update_date", type="datetimetz")
      */
     private $update_date;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="del_flg", type="boolean", options={"default": 0})
      */
     private $del_flg = 0;
 
@@ -83,12 +100,12 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
     /**
      * Set custom_sql
      *
-     * @param string $customCsvExport
-     * @return CustomCsvExport
+     * @param $custom_sql
+     * @return $this
      */
-    public function setCustomSql($customSql)
+    public function setCustomSql($custom_sql)
     {
-        $this->custom_sql = $customSql;
+        $this->custom_sql = $custom_sql;
 
         return $this;
     }

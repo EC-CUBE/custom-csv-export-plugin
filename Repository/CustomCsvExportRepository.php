@@ -10,12 +10,22 @@
 
 namespace Plugin\CustomCsvExport\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Eccube\Common\Constant;
+use Eccube\Repository\AbstractRepository;
 use Plugin\CustomCsvExport\Entity\CustomCsvExport;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class CustomCsvExportRepository extends EntityRepository
+class CustomCsvExportRepository extends AbstractRepository
 {
+    /**
+     * CustomCsvExportRepository constructor.
+     * @param RegistryInterface $registry
+     */
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, CustomCsvExport::class);
+    }
+
     /**
      * 設定SQL一覧を取得する.
      *
@@ -37,8 +47,7 @@ class CustomCsvExportRepository extends EntityRepository
      */
     public function getArrayList($custom_csv_export)
     {
-        $em = $this->getEntityManager();
-        $qb = $em->getConnection()->prepare('SELECT '.$custom_csv_export);
+        $qb = $this->getEntityManager()->getConnection()->prepare('SELECT '.$custom_csv_export);
         $qb->execute();
         $result = $qb->fetchAll();
 
@@ -67,7 +76,7 @@ class CustomCsvExportRepository extends EntityRepository
      * @param CustomCsvExport $CustomCsvExport 設定SQL
      * @return bool 成功した場合 true
      */
-    public function save(CustomCsvExport $CustomCsvExport)
+    public function save($CustomCsvExport)
     {
         $em = $this->getEntityManager();
         $em->getConnection()->beginTransaction();
@@ -99,7 +108,7 @@ class CustomCsvExportRepository extends EntityRepository
      * @param CustomCsvExport $CustomCsvExport 削除対象の設定SQL
      * @return bool 成功した場合 true
      */
-    public function delete(CustomCsvExport $CustomCsvExport)
+    public function delete($CustomCsvExport)
     {
         $em = $this->getEntityManager();
         $em->getConnection()->beginTransaction();
