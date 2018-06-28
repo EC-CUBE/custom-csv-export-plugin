@@ -14,5 +14,5 @@ use Symfony\Component\Validator\Constraint;
 
 class SqlCheck extends Constraint
 {
-    public $message = 'SQL文が不正です。SQL文を見直してください';
+    public $message = 'plugin.CustomCsvExport.admin.message.validate.001';
 }

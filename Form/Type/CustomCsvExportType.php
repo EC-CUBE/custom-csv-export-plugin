@@ -16,7 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Plugin\CustomCsvExport\Validator as Asserts;
 
 class CustomCsvExportType extends AbstractType
@@ -43,7 +42,7 @@ class CustomCsvExportType extends AbstractType
     {
         $builder
             ->add('sql_name', TextType::class, array(
-                'label' => '名称',
+                'label' => 'plugin.CustomCsvExport.admin.label.001',
                 'constraints' => array(
                     new Assert\NotBlank(),
                     new Assert\Length(array(
@@ -52,7 +51,7 @@ class CustomCsvExportType extends AbstractType
                 ),
             ))
             ->add('custom_sql', TextareaType::class, array(
-                'label' => 'SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)',
+                'label' => 'plugin.CustomCsvExport.admin.label.002',
                 'constraints' => array(
                     new Asserts\SqlCheck(),
                 ),

@@ -33,7 +33,6 @@ class CustomCsvExportController extends AbstractController
         $this->customCsvExportRepository = $customCsvExportRepository;
     }
 
-
     /**
      * @Route("%eccube_admin_route%/setting/shop/custom_csv_export", name="plugin_custom_csv_export")
      * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/edit", requirements={"id" = "\d+"}, name="plugin_custom_csv_export_edit")
@@ -69,17 +68,17 @@ class CustomCsvExportController extends AbstractController
                     $status = $this->customCsvExportRepository->save($TargetCustomCsvExport);
 
                     if ($status) {
-                        $this->addSuccess('SQLを保存しました。', 'admin');
+                        $this->addSuccess('plugin.CustomCsvExport.admin.message.error.003', 'admin');
 
                         return $this->redirect($this->generateUrl('plugin_custom_csv_export'));
                     } else {
-                        $this->addError('SQLを保存できませんでした。', 'admin');
+                        $this->addError('plugin.CustomCsvExport.admin.message.error.004', 'admin');
                     }
                 } else {
-                    $this->addError('SQLを保存できませんでした。', 'admin');
+                    $this->addError('plugin.CustomCsvExport.admin.message.error.001', 'admin');
                 }
             } catch (\Exception $e) {
-                $this->addError('SQLを保存できませんでした。SQL文を正しく入力してください。', 'admin');
+                $this->addError('plugin.CustomCsvExport.admin.message.error.002', 'admin');
             }
         }
 
@@ -114,9 +113,9 @@ class CustomCsvExportController extends AbstractController
         $status = $this->customCsvExportRepository->delete($TargetCustomCsvExport);
 
         if ($status) {
-            $this->addSuccess('SQLを削除しました。', 'admin');
+            $this->addSuccess('plugin.CustomCsvExport.admin.message.success.001', 'admin');
         } else {
-            $this->addError('SQLを削除できませんでした。', 'admin');
+            $this->addError('plugin.CustomCsvExport.admin.message.error.005', 'admin');
         }
 
         return $this->redirectToRoute('plugin_custom_csv_export');
@@ -187,7 +186,7 @@ class CustomCsvExportController extends AbstractController
             return $response;
         }
 
-        $this->addError('CSVを出力できませんでした。', 'admin');
+        $this->addError('plugin.CustomCsvExport.admin.message.error.006', 'admin');
 
         return $this->redirectToRoute('plugin_custom_csv_export');
     }
@@ -225,9 +224,9 @@ class CustomCsvExportController extends AbstractController
                 try {
                     $result = $this->customCsvExportRepository->query($sql);
                     if ($result) {
-                        $message = 'エラーはありません。';
+                        $message = trans('plugin.CustomCsvExport.admin.message.check.001');
                     } else {
-                        $message = 'エラーが発生しました。';
+                        $message = trans('plugin.CustomCsvExport.admin.message.check.002');
                     }
                 } catch (\Exception $e) {
                     $message = $e->getMessage();

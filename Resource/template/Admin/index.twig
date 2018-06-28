@@ -12,8 +12,8 @@
 
 {% set menus = ['setting', 'admin_custom_csv_export'] %}
 
-{% block title %}システム設定{% endblock %}
-{% block sub_title %}カスタムCSV出力{% endblock %}
+{% block title %}{{ 'plugin.CustomCsvExport.admin.page.title'|trans }}{% endblock %}
+{% block sub_title %}{{ 'plugin.CustomCsvExport.admin.page.subtitle'|trans }}{% endblock %}
 
 {% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
 
@@ -41,17 +41,17 @@
             <div class="c-primaryCol">
                 <div class="card rounded border-0 mb-4">
                     <div class="card-header">
-                        <h4 class="box-title font-weight-bold">SQL一覧</h4>
+                        <h4 class="box-title font-weight-bold">{{ 'plugin.CustomCsvExport.admin.page.header'|trans }}</h4>
                     </div>
                     {% if CustomCsvExports|length > 0 %}
                         <div class="card-body p-0">
                             <table class="table table-sm">
                                 <thead>
                                 <tr>
-                                    <th class="border-top-0 pl-3 pt-2 pb-2">{{ 'admin.store.plugin_table.887'|trans }}</th>
-                                    <th class="border-top-0 pt-2 pb-2">{{ 'admin.store.plugin_table.888'|trans }}</th>
-                                    <th class="border-top-0 pt-2 pb-2 text-center">作成日</th>
-                                    <th class="border-top-0 pt-2 pb-2 text-center">更新日</th>
+                                    <th class="border-top-0 pl-3 pt-2 pb-2">{{ 'plugin.CustomCsvExport.admin.label.006'|trans }}</th>
+                                    <th class="border-top-0 pt-2 pb-2">{{ 'plugin.CustomCsvExport.admin.label.005'|trans }}</th>
+                                    <th class="border-top-0 pt-2 pb-2 text-center">{{ 'plugin.CustomCsvExport.admin.label.003'|trans }}</th>
+                                    <th class="border-top-0 pt-2 pb-2 text-center">{{ 'plugin.CustomCsvExport.admin.label.004'|trans }}</th>
                                     <th class="border-top-0 pt-2 pb-2">&nbsp;</th>
                                 </tr>
                                 </thead>
@@ -76,20 +76,20 @@
                                                    class="btn btn-ec-actionIcon mr-3 action-edit"
                                                    data-toggle="tooltip"
                                                    data-placement="top"
-                                                   data-original-title="CSV出力"><i
+                                                   data-original-title="{{ 'plugin.CustomCsvExport.admin.label.title.001'|trans }}"><i
                                                             class="fa fa-download fa-lg text-secondary"
                                                             aria-hidden="true"></i></a>
 
                                                 <a href="{{ url('plugin_custom_csv_export_edit', {id: CustomCsvExport.id}) }}"
                                                    class="btn btn-ec-actionIcon mr-3 action-edit"
                                                    data-toggle="tooltip" data-placement="top"
-                                                   data-original-title="編集"><i
+                                                   data-original-title="{{ 'plugin.CustomCsvExport.admin.label.title.001'|trans }}"><i
                                                             class="fa fa-pencil fa-lg text-secondary"></i></a>
                                                 <a class="btn btn-ec-actionIcon mr-3"
                                                    data-toggle="modal"
                                                    data-target="#confirmModal-{{ CustomCsvExport.id }}"
                                                    data-placement="top"
-                                                   title="削除"><i class="fa fa-close fa-lg text-secondary"></i></a>
+                                                   title="{{ 'plugin.CustomCsvExport.admin.label.title.003'|trans }}"><i class="fa fa-close fa-lg text-secondary"></i></a>
                                             </div>
 
                                             <div class="modal fade" id="confirmModal-{{ CustomCsvExport.id }}"
@@ -101,7 +101,7 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title font-weight-bold">
-                                                                {{ 'admin.product.tag.delete.confirm.title'|trans }}</h5>
+                                                                {{ 'plugin.CustomCsvExport.admin.popupConfirm.title'|trans }}</h5>
                                                             <button class="close" type="button"
                                                                     data-dismiss="modal"
                                                                     aria-label="Close"><span
@@ -110,11 +110,11 @@
                                                         </div>
                                                         <div class="modal-body text-left">
                                                             <p class="text-left">
-                                                                {{ 'admin.product.tag.delete.confirm.message'|trans }}</p>
+                                                                {{ 'plugin.CustomCsvExport.admin.popupConfirm.message'|trans }}</p>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button class="btn btn-ec-sub" type="button"
-                                                                    data-dismiss="modal">{{ 'admin.product.index.cancel'|trans }}
+                                                                    data-dismiss="modal">{{ 'common.label.cancel'|trans }}
                                                             </button>
                                                             <a
                                                                     href="{{ url('plugin_custom_csv_export_delete', {id: CustomCsvExport.id}) }}"
@@ -122,7 +122,7 @@
                                                                     data-confirm="false"
                                                                     {{ csrf_token_for_anchor() }}
                                                                     data-method="delete">
-                                                                {{ 'admin.product.index.delete'|trans }}
+                                                                {{ 'common.label.delete'|trans }}
                                                             </a>
                                                         </div>
                                                     </div>
@@ -138,7 +138,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-auto">
-                                    <p>データはありません</p></div>
+                                    <p>{{ 'plugin.CustomCsvExport.admin.message.nodata'|trans }}</p></div>
                             </div>
                         </div>
                     {% endif %}
@@ -146,11 +146,11 @@
 
                 <div class="card rounded border-0 mb-4">
                     <div class="card-header">
-                        <h4 class="box-title font-weight-bold">SQL設定
+                        <h4 class="box-title font-weight-bold">{{ 'plugin.CustomCsvExport.admin.label.title.004'|trans }}
                             {% if TargetCustomCsvExport.id %}
-                                (編集中：{{ TargetCustomCsvExport.sql_name }})
+                                ({{ 'plugin.CustomCsvExport.admin.label.title.005'|trans }}：{{ TargetCustomCsvExport.sql_name }})
                             {% else %}
-                                (新規入力)
+                                ({{ 'plugin.CustomCsvExport.admin.label.title.006'|trans }})
                             {% endif %}</h4>
                     </div>
                     <div class="card-body">
@@ -159,26 +159,26 @@
                             {{ form_widget(form._token) }}
                             <div class="row form-group">
                                 <div class="col-12 col-sm-2">
-                                    <span>名称</span>
+                                    <span>{{ 'plugin.CustomCsvExport.admin.label.001'|trans }}</span>
                                 </div>
                                 <div class="col-auto col-sm-10">
-                                    {{ form_widget(form.sql_name, {attr: {placeholder: '保存するSQL名を入力'}}) }}
+                                    {{ form_widget(form.sql_name, {attr: {placeholder: 'plugin.CustomCsvExport.admin.placeholder.001'|trans}}) }}
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <div class="col-12 col-sm-2">
-                                    <span>SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)</span>
+                                    <span>{{ 'plugin.CustomCsvExport.admin.label.002'|trans }}</span>
                                 </div>
                                 <div class="col-auto col-sm-10">
-                                    {{ form_widget(form.custom_sql, {attr: {rows: 6, placeholder: 'SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。'}}) }}
+                                    {{ form_widget(form.custom_sql, {attr: {rows: 6, placeholder: 'plugin.CustomCsvExport.admin.placeholder.002'|trans}}) }}
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-sm-10 pull-right">
                                     <div class="row">
-                                        <button id="check_btn" class="btn btn-primary btn-block btn-lg">SQLチェック</button>
+                                        <button id="check_btn" class="btn btn-primary btn-block btn-lg">{{ 'plugin.CustomCsvExport.admin.label.title.007'|trans }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                 {% if message is defined and message is not null %}
                     <div class="card rounded border-0 mb-4">
                         <div class="card-header">
-                            <h4 class="box-title font-weight-bold">SQL確認結果</h4>
+                            <h4 class="box-title font-weight-bold">{{ 'plugin.CustomCsvExport.admin.label.title.008'|trans }}</h4>
                         </div>
                         <div class="card-body">
                             <div id="list_box" class="box-body no-padding">
@@ -211,7 +211,7 @@
                 <div class="col-6">
                     <div class="row align-items-center justify-content-end">
                         <div class="col-auto">
-                            <button id="register_btn" class="btn btn-ec-conversion px-5" type="submit">登録</button>
+                            <button id="register_btn" class="btn btn-ec-conversion px-5" type="submit">{{ 'plugin.CustomCsvExport.admin.button.001'|trans }}</button>
                         </div>
                     </div>
                 </div>

@@ -28,19 +28,19 @@ class SqlCheckValidator extends ConstraintValidator
 
         $error = $this->sqlValidation($value);
         if ($error) {
-            $this->buildViolation($constraint->message)
+            $this->buildViolation(trans($constraint->message))
                 ->setParameter('{{ value }}', $this->formatValue($value))
                 ->addViolation();
         }
 
         if (false === $value || (empty($value) && '0' != $value)) {
             if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->message)
+                $this->context->buildViolation(trans($constraint->message))
                     ->setParameter('{{ value }}', $this->formatValue($value))
                     ->addViolation();
             } else {
-                $constraint->message = 'SQL文を入力してください。';
-                $this->buildViolation($constraint->message)
+                $constraint->message = 'plugin.CustomCsvExport.admin.message.validate.002';
+                $this->buildViolation(trans($constraint->message))
                     ->setParameter('{{ value }}', $this->formatValue($value))
                     ->addViolation();
             }
