@@ -33,7 +33,7 @@ class CustomCsvExportRepository extends AbstractRepository
      */
     public function getList()
     {
-        $qb = $this->createQueryBuilder('cs');
+        $qb = $this->createQueryBuilder('cs')->where('cs.del_flg = :del_flg')->setParameter('del_flg', Constant::DISABLED);
         $CustomCsvExports = $qb->getQuery()->getResult();
 
         return $CustomCsvExports;

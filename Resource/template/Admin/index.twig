@@ -43,13 +43,16 @@
                     <div class="card-header">
                         <h4 class="box-title font-weight-bold">SQL一覧</h4>
                     </div>
-                    <div class="card-body p-0">
-                        {% if CustomCsvExports|length > 0 %}
+                    {% if CustomCsvExports|length > 0 %}
+                        <div class="card-body p-0">
                             <table class="table table-sm">
                                 <thead>
                                 <tr>
                                     <th class="border-top-0 pl-3 pt-2 pb-2">{{ 'admin.store.plugin_table.887'|trans }}</th>
                                     <th class="border-top-0 pt-2 pb-2">{{ 'admin.store.plugin_table.888'|trans }}</th>
+                                    <th class="border-top-0 pt-2 pb-2 text-center">作成日</th>
+                                    <th class="border-top-0 pt-2 pb-2 text-center">更新日</th>
+                                    <th class="border-top-0 pt-2 pb-2">&nbsp;</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -58,49 +61,87 @@
                                         <td class="align-middle pl-3"><a
                                                     href="{{ url('plugin_custom_csv_export_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
                                         </td>
+                                        <td class="align-middle pl-2" title="{{ CustomCsvExport.custom_sql }}">
+                                            {{ CustomCsvExport.custom_sql|length > 70 ? CustomCsvExport.custom_sql|slice(0, 70) ~ '...' : CustomCsvExport.custom_sql }}
+                                        </td>
+                                        <td class="align-middle pl-2 text-center">
+                                            {{ CustomCsvExport.create_date|date_min }}
+                                        </td>
+                                        <td class="align-middle pl-2 text-center">
+                                            {{ CustomCsvExport.update_date|date_min }}
+                                        </td>
                                         <td class="align-middle pl-3">
-                                            <ul id="sortable_list__menu--{{ CustomCsvExport.id }}"
-                                                class="dropdown-menu dropdown-menu-right">
-                                                <li>
-                                                    <a href="{{ url('plugin_custom_csv_export_delete', {id: CustomCsvExport.id}) }}" {{ csrf_token_for_anchor() }}
-                                                       data-method="delete">
-                                                        削除
-                                                    </a>
-                                                </li>
+                                            <div class="col-auto text-right">
+                                                <a href="{{ url('plugin_custom_csv_export_output', {id: CustomCsvExport.id}) }}"
+                                                   class="btn btn-ec-actionIcon mr-3 action-edit"
+                                                   data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   data-original-title="CSV出力"><i
+                                                            class="fa fa-download fa-lg text-secondary"
+                                                            aria-hidden="true"></i></a>
 
-                                                <li>
-                                                    <a href="{{ url('plugin_custom_csv_export_output', {id: CustomCsvExport.id}) }}">
-                                                        CSV出力
-                                                    </a>
-                                                </li>
+                                                <a href="{{ url('plugin_custom_csv_export_edit', {id: CustomCsvExport.id}) }}"
+                                                   class="btn btn-ec-actionIcon mr-3 action-edit"
+                                                   data-toggle="tooltip" data-placement="top"
+                                                   data-original-title="編集"><i
+                                                            class="fa fa-pencil fa-lg text-secondary"></i></a>
+                                                <a class="btn btn-ec-actionIcon mr-3"
+                                                   data-toggle="modal"
+                                                   data-target="#confirmModal-{{ CustomCsvExport.id }}"
+                                                   data-placement="top"
+                                                   title="削除"><i class="fa fa-close fa-lg text-secondary"></i></a>
+                                            </div>
 
-                                            </ul>
+                                            <div class="modal fade" id="confirmModal-{{ CustomCsvExport.id }}"
+                                                 tabindex="-1"
+                                                 role="dialog"
+                                                 aria-labelledby="confirmModal-{{ CustomCsvExport.id }}"
+                                                 aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title font-weight-bold">
+                                                                {{ 'admin.product.tag.delete.confirm.title'|trans }}</h5>
+                                                            <button class="close" type="button"
+                                                                    data-dismiss="modal"
+                                                                    aria-label="Close"><span
+                                                                        aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-left">
+                                                            <p class="text-left">
+                                                                {{ 'admin.product.tag.delete.confirm.message'|trans }}</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-ec-sub" type="button"
+                                                                    data-dismiss="modal">{{ 'admin.product.index.cancel'|trans }}
+                                                            </button>
+                                                            <a
+                                                                    href="{{ url('plugin_custom_csv_export_delete', {id: CustomCsvExport.id}) }}"
+                                                                    class="btn btn-ec-delete"
+                                                                    data-confirm="false"
+                                                                    {{ csrf_token_for_anchor() }}
+                                                                    data-method="delete">
+                                                                {{ 'admin.product.index.delete'|trans }}
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
-                        {% else %}
-                            <div id="list_box" class="box-body no-padding">
-                                <div id="list_box__not_find_category" class="data-empty">
-                                    <p>データはありません</p></div>
-                            </div><!-- /.box-body -->
-                        {% endif %}
-                    </div>
-
-                    <div class="card-body">
-                        <div class="row">
-                            {% if CustomCsvExports|length > 0 %}
-                                <div id="sortable_list" class="box-body no-padding no-border">
-                                    <div id="sortable_list_box" class="sortable_list">
-                                        <div id="sortable_list_box__list" class="tableish">
-
-                                        </div>
-                                    </div>
-                                </div><!-- /.box-body -->
-                            {% endif %}
                         </div>
-                    </div>
+                    {% else %}
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <p>データはありません</p></div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="card rounded border-0 mb-4">
@@ -117,7 +158,8 @@
                               enctype="multipart/form-data">
                             {{ form_widget(form._token) }}
                             <div class="row form-group">
-                                <div class="col-12 col-sm-2"><span>名称</span>
+                                <div class="col-12 col-sm-2">
+                                    <span>名称</span>
                                 </div>
                                 <div class="col-auto col-sm-10">
                                     {{ form_widget(form.sql_name, {attr: {placeholder: '保存するSQL名を入力'}}) }}
@@ -125,7 +167,8 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-12 col-sm-2"><span>SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)</span>
+                                <div class="col-12 col-sm-2">
+                                    <span>SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)</span>
                                 </div>
                                 <div class="col-auto col-sm-10">
                                     {{ form_widget(form.custom_sql, {attr: {rows: 6, placeholder: 'SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。'}}) }}
@@ -151,9 +194,9 @@
                         <div class="card-body">
                             <div id="list_box" class="box-body no-padding">
                                 <pre>{{ message }}</pre>
-                            </div><!-- /.box-body -->
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box-body -->
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
         </div>
@@ -163,9 +206,7 @@
         <div class="c-conversionArea__container">
             <div class="row justify-content-between align-items-center">
                 <div class="col-6">
-                    <div class="c-conversionArea__leftBlockItem">
-                        &nbsp;
-                    </div>
+                    <div class="c-conversionArea__leftBlockItem">&nbsp;</div>
                 </div>
                 <div class="col-6">
                     <div class="row align-items-center justify-content-end">

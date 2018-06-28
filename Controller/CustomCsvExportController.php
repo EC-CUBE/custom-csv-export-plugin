@@ -194,6 +194,7 @@ class CustomCsvExportController extends AbstractController
 
     /**
      * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/confirm", name="plugin_custom_csv_export_confirm")
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/confirm", name="plugin_custom_csv_export_edit_confirm")
      *
      * @param Request $request
      * @param null $id
@@ -216,7 +217,7 @@ class CustomCsvExportController extends AbstractController
 
         $form->handleRequest($request);
 
-        $message = 'test message';
+        $message = null;
         if ($form->isSubmitted() && $form->isValid()) {
 
             if (!is_null($form['custom_sql']->getData())) {

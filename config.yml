@@ -1,7 +1,3 @@
 name: カスタムCSV出力プラグイン
 code: CustomCsvExport
 version: 1.0.0
-service:
-    - CustomCsvExportServiceProvider
-orm.path:
-    - /Resource/doctrine
