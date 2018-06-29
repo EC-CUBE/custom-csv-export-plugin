@@ -32,4 +32,5 @@ plugin.CustomCsvExport.admin.popupConfirm.message: 削除してもよろしい�
 plugin.CustomCsvExport.admin.page.title: システム設定
 plugin.CustomCsvExport.admin.page.subtitle: カスタムCSV出力
 plugin.CustomCsvExport.admin.page.header: SQL一覧
+plugin.CustomCsvExport.admin.nav.menu: カスタムCSV出力
 

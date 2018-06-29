@@ -22,7 +22,7 @@ class Nav implements EccubeNav
         return [
             'setting' => [
                 'id' => 'admin_custom_csv_export',
-                'name' => 'カスタムCSV出力',
+                'name' => 'plugin.CustomCsvExport.admin.nav.menu',
                 'url' => 'plugin_custom_csv_export',
             ],
         ];
