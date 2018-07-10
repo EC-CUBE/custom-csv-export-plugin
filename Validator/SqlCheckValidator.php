@@ -28,7 +28,7 @@ class SqlCheckValidator extends ConstraintValidator
 
         $error = $this->sqlValidation($value);
         if ($error) {
-            $this->buildViolation(trans($constraint->message))
+            $this->context->buildViolation(trans($constraint->message))
                 ->setParameter('{{ value }}', $this->formatValue($value))
                 ->addViolation();
         }
@@ -40,7 +40,7 @@ class SqlCheckValidator extends ConstraintValidator
                     ->addViolation();
             } else {
                 $constraint->message = 'plugin.CustomCsvExport.admin.message.validate.002';
-                $this->buildViolation(trans($constraint->message))
+                $this->context->buildViolation(trans($constraint->message))
                     ->setParameter('{{ value }}', $this->formatValue($value))
                     ->addViolation();
             }
