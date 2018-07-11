@@ -163,6 +163,7 @@
                                 </div>
                                 <div class="col-auto col-sm-10">
                                     {{ form_widget(form.sql_name, {attr: {placeholder: 'plugin.CustomCsvExport.admin.placeholder.001'|trans}}) }}
+                                    {{ form_errors(form.sql_name) }}
                                 </div>
                             </div>
 
@@ -172,6 +173,7 @@
                                 </div>
                                 <div class="col-auto col-sm-10">
                                     {{ form_widget(form.custom_sql, {attr: {rows: 6, placeholder: 'plugin.CustomCsvExport.admin.placeholder.002'|trans}}) }}
+                                    {{ form_errors(form.custom_sql) }}
                                 </div>
                             </div>
 
