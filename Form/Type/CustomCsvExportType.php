@@ -42,7 +42,7 @@ class CustomCsvExportType extends AbstractType
     {
         $builder
             ->add('sql_name', TextType::class, array(
-                'label' => 'plugin.CustomCsvExport.admin.label.001',
+                'label' => 'CustomCsvExport.admin.label.001',
                 'constraints' => array(
                     new Assert\NotBlank(),
                     new Assert\Length(array(
@@ -51,7 +51,7 @@ class CustomCsvExportType extends AbstractType
                 ),
             ))
             ->add('custom_sql', TextareaType::class, array(
-                'label' => 'plugin.CustomCsvExport.admin.label.002',
+                'label' => 'CustomCsvExport.admin.label.002',
                 'constraints' => array(
                     new Asserts\SqlCheck(),
                 ),
@@ -63,6 +63,6 @@ class CustomCsvExportType extends AbstractType
      */
     public function getName()
     {
-        return 'admin_custom_csv_export';
+        return 'custom_csv_admin_export';
     }
 }

@@ -15,15 +15,15 @@ namespace Plugin\CustomCsvExport;
 
 use Eccube\Common\EccubeNav;
 
-class Nav implements EccubeNav
+class CustomCsvExportNav implements EccubeNav
 {
     public static function getNav()
     {
         return [
             'setting' => [
-                'id' => 'admin_custom_csv_export',
-                'name' => 'plugin.CustomCsvExport.admin.nav.menu',
-                'url' => 'plugin_custom_csv_export',
+                'id' => 'custom_csv_admin_export',
+                'name' => 'CustomCsvExport.admin.nav.menu',
+                'url' => 'custom_csv_admin_export',
             ],
         ];
     }

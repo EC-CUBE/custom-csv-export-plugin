@@ -14,5 +14,5 @@ use Symfony\Component\Validator\Constraint;
 
 class SqlCheck extends Constraint
 {
-    public $message = 'plugin.CustomCsvExport.admin.message.validate.001';
+    public $message = 'CustomCsvExport.admin.message.validate.001';
 }

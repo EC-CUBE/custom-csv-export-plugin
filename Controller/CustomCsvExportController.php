@@ -34,8 +34,8 @@ class CustomCsvExportController extends AbstractController
     }
 
     /**
-     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export", name="plugin_custom_csv_export")
-     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/edit", requirements={"id" = "\d+"}, name="plugin_custom_csv_export_edit")
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export", name="custom_csv_admin_export")
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/edit", requirements={"id" = "\d+"}, name="custom_csv_admin_export_edit")
      *
      * @param Request $request
      * @param null $id
@@ -68,17 +68,17 @@ class CustomCsvExportController extends AbstractController
                     $status = $this->customCsvExportRepository->save($TargetCustomCsvExport);
 
                     if ($status) {
-                        $this->addSuccess('plugin.CustomCsvExport.admin.message.error.003', 'admin');
+                        $this->addSuccess('CustomCsvExport.admin.message.error.003', 'admin');
 
-                        return $this->redirect($this->generateUrl('plugin_custom_csv_export'));
+                        return $this->redirect($this->generateUrl('custom_csv_admin_export'));
                     } else {
-                        $this->addError('plugin.CustomCsvExport.admin.message.error.004', 'admin');
+                        $this->addError('CustomCsvExport.admin.message.error.004', 'admin');
                     }
                 } else {
-                    $this->addError('plugin.CustomCsvExport.admin.message.error.001', 'admin');
+                    $this->addError('CustomCsvExport.admin.message.error.001', 'admin');
                 }
             } catch (\Exception $e) {
-                $this->addError('plugin.CustomCsvExport.admin.message.error.002', 'admin');
+                $this->addError('CustomCsvExport.admin.message.error.002', 'admin');
             }
         }
 
@@ -92,37 +92,25 @@ class CustomCsvExportController extends AbstractController
     }
 
     /**
-     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/delete", requirements={"id" = "\d+"}, name="plugin_custom_csv_export_delete")
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/delete", requirements={"id" = "\d+"}, name="custom_csv_admin_export_delete")
      *
-     * @param Request $request
-     * @param $id
+     * @param CustomCsvExport $customCsvExport
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function delete(Request $request, $id)
+    public function delete(CustomCsvExport $customCsvExport)
     {
         $this->isTokenValid();
 
-        $TargetCustomCsvExport = $this->customCsvExportRepository->find($id);
+        $this->entityManager->remove($customCsvExport);
+        $this->entityManager->flush($customCsvExport);
 
-        if (!$TargetCustomCsvExport) {
-            $this->deleteMessage();
+        $this->addSuccess('CustomCsvExport.admin.message.success.001', 'admin');
 
-            return $this->redirectToRoute('plugin_custom_csv_export');
-        }
-
-        $status = $this->customCsvExportRepository->delete($TargetCustomCsvExport);
-
-        if ($status) {
-            $this->addSuccess('plugin.CustomCsvExport.admin.message.success.001', 'admin');
-        } else {
-            $this->addError('plugin.CustomCsvExport.admin.message.error.005', 'admin');
-        }
-
-        return $this->redirectToRoute('plugin_custom_csv_export');
+        return $this->redirectToRoute('custom_csv_admin_export');
     }
 
     /**
-     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/output", requirements={"id" = "\d+"}, name="plugin_custom_csv_export_output")
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/output", requirements={"id" = "\d+"}, name="custom_csv_admin_export_output")
      *
      * @param Request $request
      * @param null $id
@@ -186,14 +174,14 @@ class CustomCsvExportController extends AbstractController
             return $response;
         }
 
-        $this->addError('plugin.CustomCsvExport.admin.message.error.006', 'admin');
+        $this->addError('CustomCsvExport.admin.message.error.006', 'admin');
 
-        return $this->redirectToRoute('plugin_custom_csv_export');
+        return $this->redirectToRoute('custom_csv_admin_export');
     }
 
     /**
-     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/confirm", name="plugin_custom_csv_export_confirm")
-     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/confirm", name="plugin_custom_csv_export_edit_confirm")
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/confirm", name="custom_csv_admin_export_confirm")
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/confirm", name="custom_csv_admin_export_edit_confirm")
      *
      * @param Request $request
      * @param null $id
@@ -224,9 +212,9 @@ class CustomCsvExportController extends AbstractController
                 try {
                     $result = $this->customCsvExportRepository->query($sql);
                     if ($result) {
-                        $message = trans('plugin.CustomCsvExport.admin.message.check.001');
+                        $message = trans('CustomCsvExport.admin.message.check.001');
                     } else {
-                        $message = trans('plugin.CustomCsvExport.admin.message.check.002');
+                        $message = trans('CustomCsvExport.admin.message.check.002');
                     }
                 } catch (\Exception $e) {
                     $message = $e->getMessage();

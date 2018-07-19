@@ -10,10 +10,10 @@
 
 {% extends '@admin/default_frame.twig' %}
 
-{% set menus = ['setting', 'admin_custom_csv_export'] %}
+{% set menus = ['setting', 'custom_csv_admin_export'] %}
 
-{% block title %}{{ 'plugin.CustomCsvExport.admin.page.title'|trans }}{% endblock %}
-{% block sub_title %}{{ 'plugin.CustomCsvExport.admin.page.subtitle'|trans }}{% endblock %}
+{% block title %}{{ 'CustomCsvExport.admin.page.title'|trans }}{% endblock %}
+{% block sub_title %}{{ 'CustomCsvExport.admin.page.subtitle'|trans }}{% endblock %}
 
 {% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
 
@@ -21,13 +21,13 @@
     <script>
         $(function () {
             $('#register_btn').click(function () {
-                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('plugin_custom_csv_export_edit', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('plugin_custom_csv_export') }}{% endif %}");
+                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('custom_csv_admin_export_edit', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('custom_csv_admin_export') }}{% endif %}");
                 $('#form1').submit();
                 return false;
             });
 
             $('#check_btn').click(function () {
-                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('plugin_custom_csv_export_edit_confirm', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('plugin_custom_csv_export_confirm') }}{% endif %}");
+                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('custom_csv_admin_export_edit_confirm', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('custom_csv_admin_export_confirm') }}{% endif %}");
                 $('#form1').submit();
                 return false;
             });
@@ -41,17 +41,17 @@
             <div class="c-primaryCol">
                 <div class="card rounded border-0 mb-4">
                     <div class="card-header">
-                        <h4 class="box-title font-weight-bold">{{ 'plugin.CustomCsvExport.admin.page.header'|trans }}</h4>
+                        <h4 class="box-title font-weight-bold">{{ 'CustomCsvExport.admin.page.header'|trans }}</h4>
                     </div>
                     {% if CustomCsvExports|length > 0 %}
                         <div class="card-body p-0">
                             <table class="table table-sm">
                                 <thead>
                                 <tr>
-                                    <th class="border-top-0 pl-3 pt-2 pb-2">{{ 'plugin.CustomCsvExport.admin.label.006'|trans }}</th>
-                                    <th class="border-top-0 pt-2 pb-2">{{ 'plugin.CustomCsvExport.admin.label.005'|trans }}</th>
-                                    <th class="border-top-0 pt-2 pb-2 text-center">{{ 'plugin.CustomCsvExport.admin.label.003'|trans }}</th>
-                                    <th class="border-top-0 pt-2 pb-2 text-center">{{ 'plugin.CustomCsvExport.admin.label.004'|trans }}</th>
+                                    <th class="border-top-0 pl-3 pt-2 pb-2">{{ 'CustomCsvExport.admin.label.006'|trans }}</th>
+                                    <th class="border-top-0 pt-2 pb-2">{{ 'CustomCsvExport.admin.label.005'|trans }}</th>
+                                    <th class="border-top-0 pt-2 pb-2 text-center">{{ 'CustomCsvExport.admin.label.003'|trans }}</th>
+                                    <th class="border-top-0 pt-2 pb-2 text-center">{{ 'CustomCsvExport.admin.label.004'|trans }}</th>
                                     <th class="border-top-0 pt-2 pb-2">&nbsp;</th>
                                 </tr>
                                 </thead>
@@ -59,7 +59,7 @@
                                 {% for CustomCsvExport in CustomCsvExports %}
                                     <tr>
                                         <td class="align-middle pl-3"><a
-                                                    href="{{ url('plugin_custom_csv_export_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
+                                                    href="{{ url('custom_csv_admin_export_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
                                         </td>
                                         <td class="align-middle pl-2" title="{{ CustomCsvExport.custom_sql }}">
                                             {{ CustomCsvExport.custom_sql|length > 70 ? CustomCsvExport.custom_sql|slice(0, 70) ~ '...' : CustomCsvExport.custom_sql }}
@@ -72,24 +72,24 @@
                                         </td>
                                         <td class="align-middle pl-3">
                                             <div class="col-auto text-right">
-                                                <a href="{{ url('plugin_custom_csv_export_output', {id: CustomCsvExport.id}) }}"
+                                                <a href="{{ url('custom_csv_admin_export_output', {id: CustomCsvExport.id}) }}"
                                                    class="btn btn-ec-actionIcon mr-3 action-edit"
                                                    data-toggle="tooltip"
                                                    data-placement="top"
-                                                   data-original-title="{{ 'plugin.CustomCsvExport.admin.label.title.001'|trans }}"><i
+                                                   data-original-title="{{ 'CustomCsvExport.admin.label.title.001'|trans }}"><i
                                                             class="fa fa-download fa-lg text-secondary"
                                                             aria-hidden="true"></i></a>
 
-                                                <a href="{{ url('plugin_custom_csv_export_edit', {id: CustomCsvExport.id}) }}"
+                                                <a href="{{ url('custom_csv_admin_export_edit', {id: CustomCsvExport.id}) }}"
                                                    class="btn btn-ec-actionIcon mr-3 action-edit"
                                                    data-toggle="tooltip" data-placement="top"
-                                                   data-original-title="{{ 'plugin.CustomCsvExport.admin.label.title.001'|trans }}"><i
+                                                   data-original-title="{{ 'CustomCsvExport.admin.label.title.001'|trans }}"><i
                                                             class="fa fa-pencil fa-lg text-secondary"></i></a>
                                                 <a class="btn btn-ec-actionIcon mr-3"
                                                    data-toggle="modal"
                                                    data-target="#confirmModal-{{ CustomCsvExport.id }}"
                                                    data-placement="top"
-                                                   title="{{ 'plugin.CustomCsvExport.admin.label.title.003'|trans }}"><i class="fa fa-close fa-lg text-secondary"></i></a>
+                                                   title="{{ 'CustomCsvExport.admin.label.title.003'|trans }}"><i class="fa fa-close fa-lg text-secondary"></i></a>
                                             </div>
 
                                             <div class="modal fade" id="confirmModal-{{ CustomCsvExport.id }}"
@@ -101,7 +101,7 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title font-weight-bold">
-                                                                {{ 'plugin.CustomCsvExport.admin.popupConfirm.title'|trans }}</h5>
+                                                                {{ 'CustomCsvExport.admin.popupConfirm.title'|trans }}</h5>
                                                             <button class="close" type="button"
                                                                     data-dismiss="modal"
                                                                     aria-label="Close"><span
@@ -110,14 +110,14 @@
                                                         </div>
                                                         <div class="modal-body text-left">
                                                             <p class="text-left">
-                                                                {{ 'plugin.CustomCsvExport.admin.popupConfirm.message'|trans }}</p>
+                                                                {{ 'CustomCsvExport.admin.popupConfirm.message'|trans }}</p>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button class="btn btn-ec-sub" type="button"
                                                                     data-dismiss="modal">{{ 'common.label.cancel'|trans }}
                                                             </button>
                                                             <a
-                                                                    href="{{ url('plugin_custom_csv_export_delete', {id: CustomCsvExport.id}) }}"
+                                                                    href="{{ url('custom_csv_admin_export_delete', {id: CustomCsvExport.id}) }}"
                                                                     class="btn btn-ec-delete"
                                                                     data-confirm="false"
                                                                     {{ csrf_token_for_anchor() }}
@@ -138,7 +138,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-auto">
-                                    <p>{{ 'plugin.CustomCsvExport.admin.message.nodata'|trans }}</p></div>
+                                    <p>{{ 'CustomCsvExport.admin.message.nodata'|trans }}</p></div>
                             </div>
                         </div>
                     {% endif %}
@@ -146,11 +146,11 @@
 
                 <div class="card rounded border-0 mb-4">
                     <div class="card-header">
-                        <h4 class="box-title font-weight-bold">{{ 'plugin.CustomCsvExport.admin.label.title.004'|trans }}
+                        <h4 class="box-title font-weight-bold">{{ 'CustomCsvExport.admin.label.title.004'|trans }}
                             {% if TargetCustomCsvExport.id %}
-                                ({{ 'plugin.CustomCsvExport.admin.label.title.005'|trans }}：{{ TargetCustomCsvExport.sql_name }})
+                                ({{ 'CustomCsvExport.admin.label.title.005'|trans }}：{{ TargetCustomCsvExport.sql_name }})
                             {% else %}
-                                ({{ 'plugin.CustomCsvExport.admin.label.title.006'|trans }})
+                                ({{ 'CustomCsvExport.admin.label.title.006'|trans }})
                             {% endif %}</h4>
                     </div>
                     <div class="card-body">
@@ -159,20 +159,20 @@
                             {{ form_widget(form._token) }}
                             <div class="row form-group">
                                 <div class="col-12 col-sm-2">
-                                    <span>{{ 'plugin.CustomCsvExport.admin.label.001'|trans }}</span>
+                                    <span>{{ 'CustomCsvExport.admin.label.001'|trans }}</span>
                                 </div>
                                 <div class="col-auto col-sm-10">
-                                    {{ form_widget(form.sql_name, {attr: {placeholder: 'plugin.CustomCsvExport.admin.placeholder.001'|trans}}) }}
+                                    {{ form_widget(form.sql_name, {attr: {placeholder: 'CustomCsvExport.admin.placeholder.001'|trans}}) }}
                                     {{ form_errors(form.sql_name) }}
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <div class="col-12 col-sm-2">
-                                    <span>{{ 'plugin.CustomCsvExport.admin.label.002'|trans }}</span>
+                                    <span>{{ 'CustomCsvExport.admin.label.002'|trans }}</span>
                                 </div>
                                 <div class="col-auto col-sm-10">
-                                    {{ form_widget(form.custom_sql, {attr: {rows: 6, placeholder: 'plugin.CustomCsvExport.admin.placeholder.002'|trans}}) }}
+                                    {{ form_widget(form.custom_sql, {attr: {rows: 6, placeholder: 'CustomCsvExport.admin.placeholder.002'|trans}}) }}
                                     {{ form_errors(form.custom_sql) }}
                                 </div>
                             </div>
@@ -180,7 +180,7 @@
                             <div class="form-group">
                                 <div class="col-sm-10 pull-right">
                                     <div class="row">
-                                        <button id="check_btn" class="btn btn-primary btn-block btn-lg">{{ 'plugin.CustomCsvExport.admin.label.title.007'|trans }}</button>
+                                        <button id="check_btn" class="btn btn-primary btn-block btn-lg">{{ 'CustomCsvExport.admin.label.title.007'|trans }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +191,7 @@
                 {% if message is defined and message is not null %}
                     <div class="card rounded border-0 mb-4">
                         <div class="card-header">
-                            <h4 class="box-title font-weight-bold">{{ 'plugin.CustomCsvExport.admin.label.title.008'|trans }}</h4>
+                            <h4 class="box-title font-weight-bold">{{ 'CustomCsvExport.admin.label.title.008'|trans }}</h4>
                         </div>
                         <div class="card-body">
                             <div id="list_box" class="box-body no-padding">
@@ -213,7 +213,7 @@
                 <div class="col-6">
                     <div class="row align-items-center justify-content-end">
                         <div class="col-auto">
-                            <button id="register_btn" class="btn btn-ec-conversion px-5" type="submit">{{ 'plugin.CustomCsvExport.admin.button.001'|trans }}</button>
+                            <button id="register_btn" class="btn btn-ec-conversion px-5" type="submit">{{ 'CustomCsvExport.admin.button.001'|trans }}</button>
                         </div>
                     </div>
                 </div>
