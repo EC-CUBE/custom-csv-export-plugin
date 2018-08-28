@@ -1,36 +1,38 @@
-CustomCsvExport.admin.message.success.001: SQLを削除しました。
-CustomCsvExport.admin.message.error.001: SQLを保存できませんでした。
-CustomCsvExport.admin.message.error.002: SQLを保存できませんでした。SQL文を正しく入力してください。
-CustomCsvExport.admin.message.error.003: SQLを保存しました。
-CustomCsvExport.admin.message.error.004: SQLを保存できませんでした。
-CustomCsvExport.admin.message.error.005: SQLを削除できませんでした。
-CustomCsvExport.admin.message.error.006: CSVを出力できませんでした。
-CustomCsvExport.admin.message.check.001: エラーはありません。
-CustomCsvExport.admin.message.check.002: エラーが発生しました。
-CustomCsvExport.admin.message.validate.001: SQL文が不正です。SQL文を見直してください
-CustomCsvExport.admin.message.validate.002: SQL文を入力してください。
-CustomCsvExport.admin.label.001: 名称
-CustomCsvExport.admin.label.002: SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)
-CustomCsvExport.admin.label.003: 作成日
-CustomCsvExport.admin.label.004: 更新日
-CustomCsvExport.admin.label.005: SQLスクリプト
-CustomCsvExport.admin.label.006: 名前
-CustomCsvExport.admin.placeholder.001: 保存するSQL名を入力
-CustomCsvExport.admin.placeholder.002: SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。
-CustomCsvExport.admin.label.title.001: CSV出力
-CustomCsvExport.admin.label.title.002: 編集
-CustomCsvExport.admin.label.title.003: 削除
-CustomCsvExport.admin.label.title.004: SQL設定
-CustomCsvExport.admin.label.title.005: 編集中
-CustomCsvExport.admin.label.title.006: 新規入力
-CustomCsvExport.admin.label.title.007: SQLチェック
-CustomCsvExport.admin.label.title.008: SQL確認結果
-CustomCsvExport.admin.button.001: 登録
-CustomCsvExport.admin.message.nodata: データはありません
-CustomCsvExport.admin.popupConfirm.title: SQLスクリプトを削除します。
-CustomCsvExport.admin.popupConfirm.message: 削除してもよろしいですか?
-CustomCsvExport.admin.page.title: システム設定
-CustomCsvExport.admin.page.subtitle: カスタムCSV出力
-CustomCsvExport.admin.page.header: SQL一覧
-CustomCsvExport.admin.nav.menu: カスタムCSV出力
+custom_csv_export.admin.nav.menu: カスタムCSV出力
+
+custom_csv_export.admin.page.title: システム設定
+custom_csv_export.admin.page.subtitle: カスタムCSV出力
+custom_csv_export.admin.page.header: SQL一覧
+
+custom_csv_export.admin.message.delete.success: SQLを削除しました。
+custom_csv_export.admin.message.cannot.save: SQLを保存できませんでした。
+custom_csv_export.admin.message.save.success: SQLを保存しました。
+custom_csv_export.admin.message.remind.statements: SQLを保存できませんでした。SQL文を正しく入力してください。
+custom_csv_export.admin.message.output.error: CSVを出力できませんでした。
+custom_csv_export.admin.message.check.ok: エラーはありません。
+custom_csv_export.admin.message.check.fail: エラーが発生しました。
+custom_csv_export.admin.message.validate.001: SQL文が不正です。SQL文を見直してください
+custom_csv_export.admin.message.validate.002: SQL文を入力してください。
+custom_csv_export.admin.message.nodata: データはありません
+
+custom_csv_export.admin.list.created_at: 作成日
+custom_csv_export.admin.list.updated_at: 更新日
+custom_csv_export.admin.list.sql_script: SQLスクリプト
+custom_csv_export.admin.list.name: 名前
+
+custom_csv_export.admin.placeholder.sql_name: 保存するSQL名を入力
+custom_csv_export.admin.placeholder.guide: SQL文を入力、SQL文には読み込み関係以外のSQLコマンドおよび";"記号は入力できません。
+
+custom_csv_export.admin.label.name: 名称
+custom_csv_export.admin.label.custom_sql: SQL文(最初のSELECTは記述しないでください。最後の;(セミコロン)も不要です。)
+custom_csv_export.admin.label.title.001: CSV出力
+custom_csv_export.admin.label.title.002: 編集
+custom_csv_export.admin.label.title.004: SQL設定
+custom_csv_export.admin.label.title.005: 編集中
+custom_csv_export.admin.label.title.006: 新規入力
+custom_csv_export.admin.label.title.007: SQLチェック
+custom_csv_export.admin.label.title.008: SQL確認結果
+
+custom_csv_export.admin.popup.confirm.title: SQLスクリプトを削除します。
+custom_csv_export.admin.popup.confirm.message: 削除してもよろしいですか?
 

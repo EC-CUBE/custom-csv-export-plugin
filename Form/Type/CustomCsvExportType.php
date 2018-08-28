@@ -1,8 +1,11 @@
 <?php
+
 /*
- * This file is part of the Custom Csv Export Plugin
+ * This file is part of EC-CUBE
  *
- * Copyright (C) 2017 LOCKON CO.,LTD. All Rights Reserved.
+ * Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * http://www.lockon.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -41,21 +44,21 @@ class CustomCsvExportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('sql_name', TextType::class, array(
-                'label' => 'CustomCsvExport.admin.label.001',
-                'constraints' => array(
+            ->add('sql_name', TextType::class, [
+                'label' => 'custom_csv_export.admin.label.name',
+                'constraints' => [
                     new Assert\NotBlank(),
-                    new Assert\Length(array(
+                    new Assert\Length([
                         'max' => $this->eccubeConfig['eccube_stext_len'],
-                    )),
-                ),
-            ))
-            ->add('custom_sql', TextareaType::class, array(
-                'label' => 'CustomCsvExport.admin.label.002',
-                'constraints' => array(
+                    ]),
+                ],
+            ])
+            ->add('custom_sql', TextareaType::class, [
+                'label' => 'custom_csv_export.admin.label.custom_sql',
+                'constraints' => [
                     new Asserts\SqlCheck(),
-                ),
-            ));
+                ],
+            ]);
     }
 
     /**

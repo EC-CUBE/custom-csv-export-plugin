@@ -1,8 +1,11 @@
 <?php
+
 /*
- * This file is part of the Custom Csv Export Plugin
+ * This file is part of EC-CUBE
  *
- * Copyright (C) 2017 LOCKON CO.,LTD. All Rights Reserved.
+ * Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * http://www.lockon.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -67,7 +70,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -78,6 +81,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
      * Set sql_name
      *
      * @param string $sqlName
+     *
      * @return CustomCsvExport
      */
     public function setSqlName($sqlName)
@@ -90,7 +94,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
     /**
      * Get sql_name
      *
-     * @return string 
+     * @return string
      */
     public function getSqlName()
     {
@@ -101,6 +105,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
      * Set custom_sql
      *
      * @param $custom_sql
+     *
      * @return $this
      */
     public function setCustomSql($custom_sql)
@@ -113,7 +118,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
     /**
      * Get custom_sql
      *
-     * @return string 
+     * @return string
      */
     public function getCustomSql()
     {
@@ -124,6 +129,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
      * Set create_date
      *
      * @param \DateTime $createDate
+     *
      * @return CustomCsvExport
      */
     public function setCreateDate($createDate)
@@ -136,7 +142,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
     /**
      * Get create_date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreateDate()
     {
@@ -147,6 +153,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
      * Set update_date
      *
      * @param \DateTime $updateDate
+     *
      * @return CustomCsvExport
      */
     public function setUpdateDate($updateDate)
@@ -159,7 +166,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
     /**
      * Get update_date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdateDate()
     {
@@ -170,6 +177,7 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
      * Set del_flg
      *
      * @param integer $delFlg
+     *
      * @return CustomCsvExport
      */
     public function setDelFlg($delFlg)
@@ -182,11 +190,10 @@ class CustomCsvExport extends \Eccube\Entity\AbstractEntity
     /**
      * Get del_flg
      *
-     * @return integer 
+     * @return integer
      */
     public function getDelFlg()
     {
         return $this->del_flg;
     }
-
 }

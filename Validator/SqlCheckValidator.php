@@ -1,8 +1,11 @@
 <?php
+
 /*
- * This file is part of the Custom Csv Export Plugin
+ * This file is part of EC-CUBE
  *
- * Copyright (C) 2017 LOCKON CO.,LTD. All Rights Reserved.
+ * Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * http://www.lockon.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -39,7 +42,7 @@ class SqlCheckValidator extends ConstraintValidator
                     ->setParameter('{{ value }}', $this->formatValue($value))
                     ->addViolation();
             } else {
-                $constraint->message = 'CustomCsvExport.admin.message.validate.002';
+                $constraint->message = 'custom_csv_export.admin.message.validate.002';
                 $this->context->buildViolation(trans($constraint->message))
                     ->setParameter('{{ value }}', $this->formatValue($value))
                     ->addViolation();
@@ -51,6 +54,7 @@ class SqlCheckValidator extends ConstraintValidator
      * SQLの入力チェック.
      *
      * @param $sql SQL文
+     *
      * @return bool
      */
     private function sqlValidation($sql)
@@ -60,10 +64,10 @@ class SqlCheckValidator extends ConstraintValidator
 
         $denyList = $this->lfGetSqlDenyList();
 
-        $prohibitedStr = str_replace(array('|', '/'), array('\|', '\/'), $denyList);
-	$pattern = '/' . join('|', $prohibitedStr) . '/i';
-	if (preg_match_all($pattern, $sql, $matches)) {
-                $error = true;
+        $prohibitedStr = str_replace(['|', '/'], ['\|', '\/'], $denyList);
+        $pattern = '/'.join('|', $prohibitedStr).'/i';
+        if (preg_match_all($pattern, $sql, $matches)) {
+            $error = true;
         }
 
         return $error;
@@ -79,7 +83,7 @@ class SqlCheckValidator extends ConstraintValidator
      */
     private function lfGetSqlDenyList()
     {
-        $arrList = array(
+        $arrList = [
             ';',
             'CREATE\s',
             'INSERT\s',
@@ -136,7 +140,7 @@ class SqlCheckValidator extends ConstraintValidator
             'RETURN\s',
             'USE\s',
             'HELP\s',
-        );
+        ];
 
         return $arrList;
     }

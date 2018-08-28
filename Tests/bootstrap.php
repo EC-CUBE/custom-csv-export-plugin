@@ -11,10 +11,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\CustomCsvExport;
-
-use Eccube\Plugin\AbstractPluginManager;
-
-class PluginManager extends AbstractPluginManager
-{
+$loader = require __DIR__.'/../../../../vendor/autoload.php';
+$envFile = __DIR__.'/../../../../.env';
+if (file_exists($envFile)) {
+    (new \Symfony\Component\Dotenv\Dotenv())->load($envFile);
 }

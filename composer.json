@@ -1,0 +1,9 @@
+{
+  "name": "ec-cube/CustomCsvExport",
+  "version": "1.0.0",
+  "description": "カスタムCSV出力プラグイン",
+  "type": "eccube-plugin",
+  "extra": {
+    "code": "CustomCsvExport"
+  }
+}

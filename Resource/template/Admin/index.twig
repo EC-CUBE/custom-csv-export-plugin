@@ -10,10 +10,10 @@
 
 {% extends '@admin/default_frame.twig' %}
 
-{% set menus = ['setting', 'custom_csv_admin_export'] %}
+{% set menus = ['setting', 'CustomCsvExport'] %}
 
-{% block title %}{{ 'CustomCsvExport.admin.page.title'|trans }}{% endblock %}
-{% block sub_title %}{{ 'CustomCsvExport.admin.page.subtitle'|trans }}{% endblock %}
+{% block title %}{{ 'custom_csv_export.admin.page.title'|trans }}{% endblock %}
+{% block sub_title %}{{ 'custom_csv_export.admin.page.subtitle'|trans }}{% endblock %}
 
 {% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
 
@@ -21,7 +21,7 @@
     <script>
         $(function () {
             $('#register_btn').click(function () {
-                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('custom_csv_admin_export_edit', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('custom_csv_admin_export') }}{% endif %}");
+                $('#form1').attr('action', "{% if TargetCustomCsvExport.id %}{{ path('custom_csv_export_admin_edit', {id: TargetCustomCsvExport.id}) }}{% else %}{{ url('custom_csv_export_admin') }}{% endif %}");
                 $('#form1').submit();
                 return false;
             });
@@ -41,25 +41,25 @@
             <div class="c-primaryCol">
                 <div class="card rounded border-0 mb-4">
                     <div class="card-header">
-                        <h4 class="box-title font-weight-bold">{{ 'CustomCsvExport.admin.page.header'|trans }}</h4>
+                        <span class="card-title">{{ 'custom_csv_export.admin.page.header'|trans }}</span>
                     </div>
                     {% if CustomCsvExports|length > 0 %}
                         <div class="card-body p-0">
                             <table class="table table-sm">
                                 <thead>
                                 <tr>
-                                    <th class="border-top-0 pl-3 pt-2 pb-2">{{ 'CustomCsvExport.admin.label.006'|trans }}</th>
-                                    <th class="border-top-0 pt-2 pb-2">{{ 'CustomCsvExport.admin.label.005'|trans }}</th>
-                                    <th class="border-top-0 pt-2 pb-2 text-center">{{ 'CustomCsvExport.admin.label.003'|trans }}</th>
-                                    <th class="border-top-0 pt-2 pb-2 text-center">{{ 'CustomCsvExport.admin.label.004'|trans }}</th>
-                                    <th class="border-top-0 pt-2 pb-2">&nbsp;</th>
+                                    <th class="border-top-0 pl-3 py-2">{{ 'custom_csv_export.admin.list.name'|trans }}</th>
+                                    <th class="border-top-0 py-2">{{ 'custom_csv_export.admin.list.sql_script'|trans }}</th>
+                                    <th class="border-top-0 py-2 text-center">{{ 'custom_csv_export.admin.list.created_at'|trans }}</th>
+                                    <th class="border-top-0 py-2 text-center">{{ 'custom_csv_export.admin.list.updated_at'|trans }}</th>
+                                    <th class="border-top-0 py-2">&nbsp;</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for CustomCsvExport in CustomCsvExports %}
                                     <tr>
-                                        <td class="align-middle pl-3"><a
-                                                    href="{{ url('custom_csv_admin_export_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
+                                        <td class="align-middle pl-3">
+                                            <a href="{{ url('custom_csv_export_admin_edit', {id: CustomCsvExport.id}) }}">{{ CustomCsvExport.sql_name }}</a>
                                         </td>
                                         <td class="align-middle pl-2" title="{{ CustomCsvExport.custom_sql }}">
                                             {{ CustomCsvExport.custom_sql|length > 70 ? CustomCsvExport.custom_sql|slice(0, 70) ~ '...' : CustomCsvExport.custom_sql }}
@@ -72,24 +72,25 @@
                                         </td>
                                         <td class="align-middle pl-3">
                                             <div class="col-auto text-right">
-                                                <a href="{{ url('custom_csv_admin_export_output', {id: CustomCsvExport.id}) }}"
+                                                <a href="{{ url('custom_csv_export_admin_output', {id: CustomCsvExport.id}) }}"
                                                    class="btn btn-ec-actionIcon mr-3 action-edit"
                                                    data-toggle="tooltip"
                                                    data-placement="top"
-                                                   data-original-title="{{ 'CustomCsvExport.admin.label.title.001'|trans }}"><i
-                                                            class="fa fa-download fa-lg text-secondary"
-                                                            aria-hidden="true"></i></a>
+                                                   title="{{ 'custom_csv_export.admin.label.title.001'|trans }}">
+                                                    <i class="fa fa-download fa-lg text-secondary"
+                                                       aria-hidden="true"></i></a>
 
-                                                <a href="{{ url('custom_csv_admin_export_edit', {id: CustomCsvExport.id}) }}"
+                                                <a href="{{ url('custom_csv_export_admin_edit', {id: CustomCsvExport.id}) }}"
                                                    class="btn btn-ec-actionIcon mr-3 action-edit"
                                                    data-toggle="tooltip" data-placement="top"
-                                                   data-original-title="{{ 'CustomCsvExport.admin.label.title.001'|trans }}"><i
-                                                            class="fa fa-pencil fa-lg text-secondary"></i></a>
+                                                   title="{{ 'admin.common.edit'|trans }}">
+                                                    <i class="fa fa-pencil fa-lg text-secondary"></i></a>
                                                 <a class="btn btn-ec-actionIcon mr-3"
                                                    data-toggle="modal"
-                                                   data-target="#confirmModal-{{ CustomCsvExport.id }}"
-                                                   data-placement="top"
-                                                   title="{{ 'CustomCsvExport.admin.label.title.003'|trans }}"><i class="fa fa-close fa-lg text-secondary"></i></a>
+                                                   data-target="#confirmModal-{{ CustomCsvExport.id }}">
+                                                    <i data-toggle="tooltip" data-placement="top"
+                                                       title="{{ 'admin.common.delete'|trans }}"
+                                                       class="fa fa-close fa-lg text-secondary"></i></a>
                                             </div>
 
                                             <div class="modal fade" id="confirmModal-{{ CustomCsvExport.id }}"
@@ -101,7 +102,7 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title font-weight-bold">
-                                                                {{ 'CustomCsvExport.admin.popupConfirm.title'|trans }}</h5>
+                                                                {{ 'custom_csv_export.admin.popup.confirm.title'|trans }}</h5>
                                                             <button class="close" type="button"
                                                                     data-dismiss="modal"
                                                                     aria-label="Close"><span
@@ -110,19 +111,19 @@
                                                         </div>
                                                         <div class="modal-body text-left">
                                                             <p class="text-left">
-                                                                {{ 'CustomCsvExport.admin.popupConfirm.message'|trans }}</p>
+                                                                {{ 'custom_csv_export.admin.popup.confirm.message'|trans }}</p>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button class="btn btn-ec-sub" type="button"
-                                                                    data-dismiss="modal">{{ 'common.label.cancel'|trans }}
+                                                                    data-dismiss="modal">{{ 'admin.common.cancel'|trans }}
                                                             </button>
                                                             <a
-                                                                    href="{{ url('custom_csv_admin_export_delete', {id: CustomCsvExport.id}) }}"
+                                                                    href="{{ url('custom_csv_export_admin_delete', {id: CustomCsvExport.id}) }}"
                                                                     class="btn btn-ec-delete"
                                                                     data-confirm="false"
                                                                     {{ csrf_token_for_anchor() }}
                                                                     data-method="delete">
-                                                                {{ 'common.label.delete'|trans }}
+                                                                {{ 'admin.common.delete'|trans }}
                                                             </a>
                                                         </div>
                                                     </div>
@@ -138,7 +139,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-auto">
-                                    <p>{{ 'CustomCsvExport.admin.message.nodata'|trans }}</p></div>
+                                    <p>{{ 'custom_csv_export.admin.message.nodata'|trans }}</p></div>
                             </div>
                         </div>
                     {% endif %}
@@ -146,12 +147,12 @@
 
                 <div class="card rounded border-0 mb-4">
                     <div class="card-header">
-                        <h4 class="box-title font-weight-bold">{{ 'CustomCsvExport.admin.label.title.004'|trans }}
+                        <span class="card-title">{{ 'custom_csv_export.admin.label.title.004'|trans }}
                             {% if TargetCustomCsvExport.id %}
-                                ({{ 'CustomCsvExport.admin.label.title.005'|trans }}：{{ TargetCustomCsvExport.sql_name }})
+                                ({{ 'custom_csv_export.admin.label.title.005'|trans }}：{{ TargetCustomCsvExport.sql_name }})
                             {% else %}
-                                ({{ 'CustomCsvExport.admin.label.title.006'|trans }})
-                            {% endif %}</h4>
+                                ({{ 'custom_csv_export.admin.label.title.006'|trans }})
+                            {% endif %}</span>
                     </div>
                     <div class="card-body">
                         <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action=""
@@ -159,20 +160,20 @@
                             {{ form_widget(form._token) }}
                             <div class="row form-group">
                                 <div class="col-12 col-sm-2">
-                                    <span>{{ 'CustomCsvExport.admin.label.001'|trans }}</span>
+                                    <span>{{ 'custom_csv_export.admin.label.name'|trans }}</span>
                                 </div>
                                 <div class="col-auto col-sm-10">
-                                    {{ form_widget(form.sql_name, {attr: {placeholder: 'CustomCsvExport.admin.placeholder.001'|trans}}) }}
+                                    {{ form_widget(form.sql_name, {attr: {placeholder: 'custom_csv_export.admin.placeholder.sql_name'|trans}}) }}
                                     {{ form_errors(form.sql_name) }}
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <div class="col-12 col-sm-2">
-                                    <span>{{ 'CustomCsvExport.admin.label.002'|trans }}</span>
+                                    <span>{{ 'custom_csv_export.admin.label.custom_sql'|trans }}</span>
                                 </div>
                                 <div class="col-auto col-sm-10">
-                                    {{ form_widget(form.custom_sql, {attr: {rows: 6, placeholder: 'CustomCsvExport.admin.placeholder.002'|trans}}) }}
+                                    {{ form_widget(form.custom_sql, {attr: {rows: 6, placeholder: 'custom_csv_export.admin.placeholder.guide'|trans}}) }}
                                     {{ form_errors(form.custom_sql) }}
                                 </div>
                             </div>
@@ -180,7 +181,8 @@
                             <div class="form-group">
                                 <div class="col-sm-10 pull-right">
                                     <div class="row">
-                                        <button id="check_btn" class="btn btn-primary btn-block btn-lg">{{ 'CustomCsvExport.admin.label.title.007'|trans }}</button>
+                                        <button id="check_btn"
+                                                class="btn btn-primary btn-block btn-lg">{{ 'custom_csv_export.admin.label.title.007'|trans }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -191,10 +193,10 @@
                 {% if message is defined and message is not null %}
                     <div class="card rounded border-0 mb-4">
                         <div class="card-header">
-                            <h4 class="box-title font-weight-bold">{{ 'CustomCsvExport.admin.label.title.008'|trans }}</h4>
+                            <span class="card-title">{{ 'custom_csv_export.admin.label.title.008'|trans }}</span>
                         </div>
                         <div class="card-body">
-                            <div id="list_box" class="box-body no-padding">
+                            <div id="list_box" class="box-body p-0">
                                 <pre>{{ message }}</pre>
                             </div>
                         </div>
@@ -213,7 +215,10 @@
                 <div class="col-6">
                     <div class="row align-items-center justify-content-end">
                         <div class="col-auto">
-                            <button id="register_btn" class="btn btn-ec-conversion px-5" type="submit">{{ 'CustomCsvExport.admin.button.001'|trans }}</button>
+                            <button
+                                    id="register_btn"
+                                    class="btn btn-ec-conversion px-5"
+                                    type="submit">{{ 'admin.common.registration'|trans }}</button>
                         </div>
                     </div>
                 </div>

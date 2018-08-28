@@ -1,17 +1,17 @@
 <?php
 
 /*
- * This file is part of the Custom Csv Export Plugin
+ * This file is part of EC-CUBE
  *
- * Copyright (C) 2017 LOCKON CO.,LTD. All Rights Reserved.
+ * Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * http://www.lockon.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-
 namespace Plugin\CustomCsvExport;
-
 
 use Eccube\Common\EccubeNav;
 
@@ -21,9 +21,13 @@ class CustomCsvExportNav implements EccubeNav
     {
         return [
             'setting' => [
-                'id' => 'custom_csv_admin_export',
-                'name' => 'CustomCsvExport.admin.nav.menu',
-                'url' => 'custom_csv_admin_export',
+                'children' => [
+                    'CustomCsvExport' => [
+                        'id' => 'custom_csv_export_admin',
+                        'name' => 'custom_csv_export.admin.nav.menu',
+                        'url' => 'custom_csv_export_admin',
+                    ],
+                ],
             ],
         ];
     }

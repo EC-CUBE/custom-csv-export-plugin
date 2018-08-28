@@ -1,8 +1,11 @@
 <?php
+
 /*
- * This file is part of the Custom Csv Export Plugin
+ * This file is part of EC-CUBE
  *
- * Copyright (C) 2017 LOCKON CO.,LTD. All Rights Reserved.
+ * Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * http://www.lockon.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,6 +22,7 @@ class CustomCsvExportRepository extends AbstractRepository
 {
     /**
      * CustomCsvExportRepository constructor.
+     *
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -43,6 +47,7 @@ class CustomCsvExportRepository extends AbstractRepository
      * CSV出力用の設定SQL実行結果を取得する.
      *
      * @param $custom_csv_export SQL文
+     *
      * @return array 実行結果
      */
     public function getArrayList($custom_csv_export)
@@ -58,6 +63,7 @@ class CustomCsvExportRepository extends AbstractRepository
      * 入力されたSQL文が正しいかどうか判定する
      *
      * @param $sql SQL文
+     *
      * @return bool SQLの実行結果
      */
     public function query($sql)
@@ -74,6 +80,7 @@ class CustomCsvExportRepository extends AbstractRepository
      * 設定SQLを保存する.
      *
      * @param CustomCsvExport $CustomCsvExport 設定SQL
+     *
      * @return bool 成功した場合 true
      */
     public function save($CustomCsvExport)
@@ -106,6 +113,7 @@ class CustomCsvExportRepository extends AbstractRepository
      * 設定SQLを削除する.
      *
      * @param CustomCsvExport $CustomCsvExport 削除対象の設定SQL
+     *
      * @return bool 成功した場合 true
      */
     public function delete($CustomCsvExport)
