@@ -17,6 +17,7 @@ use Eccube\Controller\AbstractController;
 use Plugin\CustomCsvExport\Entity\CustomCsvExport;
 use Plugin\CustomCsvExport\Form\Type\CustomCsvExportType;
 use Plugin\CustomCsvExport\Repository\CustomCsvExportRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -40,11 +41,11 @@ class CustomCsvExportController extends AbstractController
     /**
      * @Route("%eccube_admin_route%/setting/shop/custom_csv_export", name="custom_csv_export_admin")
      * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/edit", requirements={"id" = "\d+"}, name="custom_csv_export_admin_edit")
+     * @Template("@CustomCsvExport/Admin/index.twig")
      *
      * @param Request $request
      * @param null $id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return array
      */
     public function index(Request $request, $id = null)
     {
@@ -74,7 +75,7 @@ class CustomCsvExportController extends AbstractController
                     if ($status) {
                         $this->addSuccess('custom_csv_export.admin.message.save.success', 'admin');
 
-                        return $this->redirect($this->generateUrl('custom_csv_export_admin'));
+                        return $this->redirectToRoute('custom_csv_export_admin');
                     } else {
                         $this->addError('custom_csv_export.admin.message.cannot.save', 'admin');
                     }
@@ -88,15 +89,15 @@ class CustomCsvExportController extends AbstractController
 
         $CustomCsvExports = $this->customCsvExportRepository->getList();
 
-        return $this->render('@CustomCsvExport/Admin/index.twig', [
+        return [
             'form' => $form->createView(),
             'CustomCsvExports' => $CustomCsvExports,
             'TargetCustomCsvExport' => $TargetCustomCsvExport,
-        ]);
+        ];
     }
 
     /**
-     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/delete", requirements={"id" = "\d+"}, name="custom_csv_export_admin_delete")
+     * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/delete", requirements={"id" = "\d+"}, name="custom_csv_export_admin_delete", methods={"DELETE"})
      *
      * @param CustomCsvExport $customCsvExport
      *
@@ -184,11 +185,11 @@ class CustomCsvExportController extends AbstractController
     /**
      * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/confirm", name="custom_csv_admin_export_confirm")
      * @Route("%eccube_admin_route%/setting/shop/custom_csv_export/{id}/confirm", name="custom_csv_admin_export_edit_confirm")
+     * @Template("@CustomCsvExport/Admin/index.twig")
      *
      * @param Request $request
      * @param null $id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return array
      */
     public function sqlConfirm(Request $request, $id = null)
     {
@@ -226,11 +227,11 @@ class CustomCsvExportController extends AbstractController
 
         $CustomCsvExports = $this->customCsvExportRepository->getList();
 
-        return $this->render('@CustomCsvExport/Admin/index.twig', [
+        return [
             'form' => $form->createView(),
             'CustomCsvExports' => $CustomCsvExports,
             'message' => $message,
             'TargetCustomCsvExport' => $TargetCustomCsvExport,
-        ]);
+        ];
     }
 }
